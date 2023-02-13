@@ -1,4 +1,5 @@
 ﻿using stone_webapi_breakeven.Data;
+using stone_webapi_breakeven.Enums;
 using stone_webapi_breakeven.Models;
 
 namespace stone_webapi_breakeven.Services
@@ -14,6 +15,12 @@ namespace stone_webapi_breakeven.Services
 
         public int CreateAccountBanking(AccountBanking accountBanking)
         {
+
+            //Validators
+
+            //Context
+            accountBanking.Status = AccountBankingStatus.Active;
+            accountBanking.OpentedIn = DateTime.Now;
             _context.AccountsBanking.Add(accountBanking);
             _context.SaveChanges();
 

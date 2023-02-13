@@ -9,6 +9,8 @@ var connectionString = builder.Configuration.GetConnectionString("ReadConnection
 builder.Services.AddDbContext<ReadContext>(options =>
 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Add services to the container.
 //builder.Services.AddScoped<IAccountBankingService, AccountBankingService>();
 //builder.Services.AddTransient<IAccountProductService, AccountBankingService>();

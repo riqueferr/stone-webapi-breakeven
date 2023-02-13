@@ -11,12 +11,10 @@ namespace stone_webapi_breakeven.Controllers
     {
 
         private ReadContext _context;
-        private WalletController _walletController;
 
-        public ProductController(ReadContext context, WalletController walletController)
+        public ProductController(ReadContext context)
         {
             _context = context;
-            _walletController = walletController;
         }
 
         [HttpPost]
@@ -29,11 +27,6 @@ namespace stone_webapi_breakeven.Controllers
            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
 
-        //[HttpGet]
-        //public IEnumerable<AccountBanking> GetAccountBankingAll(AccountBanking accountBanking)
-        //{
-           // return accountsBanking;
-       // }
 
         [HttpGet("{id}")]
         public IActionResult GetProductById(int id)
@@ -47,9 +40,15 @@ namespace stone_webapi_breakeven.Controllers
 
 
         [HttpGet]
-        public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
+        public IEnumerable<Product> GetProductSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
-            return _context.AccountsBanking.Skip(skipe).Take(take);
+            return _context.Products.Skip(skipe).Take(take);
+        }
+
+        [HttpGet("/teste")]
+        public IEnumerable<Product> Teste([FromQuery] int skipe = 0, [FromQuery] int take = 700)
+        {
+            return _context.Products.Where(c => c.Price > 1000);
         }
 
     }

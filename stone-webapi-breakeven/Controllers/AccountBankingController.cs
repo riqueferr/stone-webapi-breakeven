@@ -1,42 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
+using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
+using stone_webapi_breakeven.Profiles;
 using stone_webapi_breakeven.Services;
 
 namespace stone_webapi_breakeven.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AccountBankingController : Controller
+    public class AccountBankingController : ControllerBase
     {
 
         private readonly ReadContext _context;
         private readonly IAccountBankingService _service;
+        private readonly IMapper _mapper;
 
-        public AccountBankingController(ReadContext context)
+        public AccountBankingController(ReadContext context, IMapper mapper)
         {
-
             _context = context;
             _service = new AccountBankingService(context);
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult CreateAccountBanking([FromBody] AccountBanking accountBanking)
+        public IActionResult CreateAccountBanking([FromBody] AccountBankingDto accountBankingDto)
         {
-            Console.WriteLine(accountBanking.Document);
+            AccountBanking accountBanking = _mapper.Map<AccountBanking>(accountBankingDto); 
             _service.CreateAccountBanking(accountBanking);
 
            return CreatedAtAction(nameof(GetAccountBankingById), new { id = accountBanking.Id }, accountBanking);
 
         }
 
-        //[HttpGet]
-        //public IEnumerable<AccountBanking> GetAccountBankingAll(AccountBanking accountBanking)
-        //{
-           // return accountsBanking;
-       // }
 
         [HttpGet("{id}")]
         public IActionResult GetAccountBankingById(int id)
@@ -53,6 +52,30 @@ namespace stone_webapi_breakeven.Controllers
         public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
             return _context.AccountsBanking.Skip(skipe).Take(take);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateAccountBanking(int id, [FromBody] AccountBankingDto accountBankingDto)
+        {
+            var accountBanking = _context.AccountsBanking.FirstOrDefault(
+                accountBanking => accountBanking.Id == id);
+
+            if(accountBanking == null) return NotFound();
+
+            _mapper.Map(accountBankingDto, accountBanking);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAccountBanking(int id)
+        {
+            var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.Id == id);
+            if (accountBanking== null) return NotFound();
+
+            _context.Remove(accountBanking);
+            _context.SaveChanges();
+            return NoContent();
         }
 
     }

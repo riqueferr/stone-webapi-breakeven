@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using stone_webapi_breakeven.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace stone_webapi_breakeven.Models
@@ -9,9 +10,13 @@ namespace stone_webapi_breakeven.Models
         public int Id { get; set; }
         public string Document { get; set; }
 
-        //[ForeignKey("Wallet")]
-        //public int? WalletId { get; set; }
-        //public virtual Wallet? Wallet { get; set; }
+        public AccountBankingStatus Status { get; set; }
+
+        public DateTime OpentedIn { get; set; }
+
+/*        [ForeignKey("Wallet")]
+        public int? WalletId { get; set; }
+        public virtual Wallet? Wallet { get; set; }*/
 
     }
 }

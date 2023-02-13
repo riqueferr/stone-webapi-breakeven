@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using stone_webapi_breakeven.Data;
 
@@ -10,9 +11,11 @@ using stone_webapi_breakeven.Data;
 namespace stonewebapibreakeven.Migrations
 {
     [DbContext(typeof(ReadContext))]
-    partial class ReadContextModelSnapshot : ModelSnapshot
+    [Migration("20230213165738_InitialCreateTest18")]
+    partial class InitialCreateTest18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +31,6 @@ namespace stonewebapibreakeven.Migrations
                     b.Property<string>("Document")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("OpentedIn")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
