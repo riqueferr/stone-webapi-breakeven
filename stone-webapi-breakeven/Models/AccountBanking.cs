@@ -14,9 +14,9 @@ namespace stone_webapi_breakeven.Models
 
         public DateTime OpentedIn { get; set; }
 
-/*        [ForeignKey("Wallet")]
-        public int? WalletId { get; set; }
-        public virtual Wallet? Wallet { get; set; }*/
+        /* [ForeignKey("Wallet")] */
+         public int? WalletId { get; set; }
+         /* public virtual Wallet? Wallet { get; set; }*/
 
     }
 }

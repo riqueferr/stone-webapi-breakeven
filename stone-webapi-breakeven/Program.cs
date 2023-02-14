@@ -12,7 +12,9 @@ options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
-//builder.Services.AddScoped<IAccountBankingService, AccountBankingService>();
+builder.Services.AddScoped<IAccountBankingService, AccountBankingService>();
+builder.Services.AddTransient<IWalletService, WalletService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 //builder.Services.AddTransient<IAccountProductService, AccountBankingService>();
 
 builder.Services.AddControllers();

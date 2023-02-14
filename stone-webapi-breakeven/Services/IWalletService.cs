@@ -4,6 +4,7 @@ namespace stone_webapi_breakeven.Services
 {
     public interface IWalletService
     {
-        int CreateAccountBanking(Wallet wallet);
+        Wallet CreateWallet();
+        int CreateWalletForAccountBanking(AccountBanking accountBanking);
     }
 }

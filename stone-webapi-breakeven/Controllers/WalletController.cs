@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.Models;
+using stone_webapi_breakeven.Services;
 
 namespace stone_webapi_breakeven.Controllers
 {
@@ -10,18 +11,19 @@ namespace stone_webapi_breakeven.Controllers
     {
 
         private ReadContext _context;
+        private IWalletService _walletService;
 
 
-        public WalletController(ReadContext context)
+        public WalletController(ReadContext context, IWalletService walletService)
         {
             _context = context;
+            _walletService = walletService;
         }
 
         [HttpPost]
-        public IActionResult CreateWallet(Wallet wallet)
+        public IActionResult CreateWallet()
         {
-            _context.Wallets.Add(wallet);
-            _context.SaveChanges();
+           Wallet wallet =  _walletService.CreateWallet();
 
             return CreatedAtAction(nameof(GetWalletById), new { id = wallet.Id }, wallet);
         }

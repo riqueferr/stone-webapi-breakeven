@@ -15,14 +15,14 @@ namespace stone_webapi_breakeven.Controllers
     public class AccountBankingController : ControllerBase
     {
 
-        private readonly ReadContext _context;
-        private readonly IAccountBankingService _service;
-        private readonly IMapper _mapper;
+        private ReadContext _context;
+        private IAccountBankingService _service;
+        private IMapper _mapper;
 
-        public AccountBankingController(ReadContext context, IMapper mapper)
+        public AccountBankingController(ReadContext context, IMapper mapper, IAccountBankingService service)
         {
             _context = context;
-            _service = new AccountBankingService(context);
+            _service = service;
             _mapper = mapper;
         }
 
@@ -76,6 +76,13 @@ namespace stone_webapi_breakeven.Controllers
             _context.Remove(accountBanking);
             _context.SaveChanges();
             return NoContent();
+        }
+
+
+        [HttpGet("test")]
+        public IEnumerable<AccountBanking> Test([FromQuery] string status)
+        {
+            return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active);
         }
 
     }
