@@ -7,16 +7,18 @@ namespace stone_webapi_breakeven.Models
     public class AccountBanking
     {
         [Key]
-        public int Id { get; set; }
+        public int AccountBankingId { get; set; }
         public string Document { get; set; }
 
         public AccountBankingStatus Status { get; set; }
 
         public DateTime OpentedIn { get; set; }
 
-        /* [ForeignKey("Wallet")] */
-         public int? WalletId { get; set; }
-         /* public virtual Wallet? Wallet { get; set; }*/
+
+        public int WalletId { get; set; }
+
+        [ForeignKey("WalletId")]
+        public virtual Wallet Wallet { get; set; }
 
     }
 }

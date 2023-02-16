@@ -10,7 +10,8 @@ namespace stone_webapi_breakeven.Data
         public DbSet<AccountBanking> AccountsBanking { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Product> Products{ get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        //public DbSet<AccountBankingProduct> Transactions { get; set; }
+        public DbSet<AccountBankingProduct> AccountBankingProducts { get; set; }
 
     }
 }

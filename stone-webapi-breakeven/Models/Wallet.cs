@@ -7,9 +7,11 @@ namespace stone_webapi_breakeven.Models
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int WalletId { get; set; }
         public double Balance { get; set; }
-
-        //public List<Product>? Products { get; set; }
+        public double? InvestedAmount { get; set; }
+        public double? FreeAmount { get; set; }
+        public double? TotalAmount { get; set; }
+        public ICollection<AccountBankingProduct>? Products { get; set; }
     }
 }

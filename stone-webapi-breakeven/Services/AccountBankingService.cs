@@ -27,7 +27,7 @@ namespace stone_webapi_breakeven.Services
             _context.AccountsBanking.Add(accountBanking);
             _context.SaveChanges();
 
-            return accountBanking.Id;
+            return accountBanking.AccountBankingId;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace stone_webapi_breakeven.Controllers
             AccountBanking accountBanking = _mapper.Map<AccountBanking>(accountBankingDto); 
             _service.CreateAccountBanking(accountBanking);
 
-           return CreatedAtAction(nameof(GetAccountBankingById), new { id = accountBanking.Id }, accountBanking);
+           return CreatedAtAction(nameof(GetAccountBankingById), new { id = accountBanking.AccountBankingId }, accountBanking);
 
         }
 
@@ -41,7 +41,7 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetAccountBankingById(int id)
         {
 
-            var result = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.Id == id);
+            var result = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
             if (result == null) return NotFound();
             
             return Ok(result);
@@ -58,7 +58,7 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult UpdateAccountBanking(int id, [FromBody] AccountBankingDto accountBankingDto)
         {
             var accountBanking = _context.AccountsBanking.FirstOrDefault(
-                accountBanking => accountBanking.Id == id);
+                accountBanking => accountBanking.AccountBankingId == id);
 
             if(accountBanking == null) return NotFound();
 
@@ -70,7 +70,7 @@ namespace stone_webapi_breakeven.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAccountBanking(int id)
         {
-            var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.Id == id);
+            var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
             if (accountBanking== null) return NotFound();
 
             _context.Remove(accountBanking);

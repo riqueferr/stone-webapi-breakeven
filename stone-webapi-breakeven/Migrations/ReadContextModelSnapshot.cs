@@ -21,7 +21,7 @@ namespace stonewebapibreakeven.Migrations
 
             modelBuilder.Entity("stone_webapi_breakeven.Models.AccountBanking", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AccountBankingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -35,10 +35,12 @@ namespace stonewebapibreakeven.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WalletId")
+                    b.Property<int?>("WalletId1")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("AccountBankingId");
+
+                    b.HasIndex("WalletId1");
 
                     b.ToTable("AccountsBanking");
                 });
@@ -49,12 +51,21 @@ namespace stonewebapibreakeven.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<double?>("AverageTicket")
+                        .HasColumnType("double");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PercentageEvolution")
+                        .HasColumnType("int");
+
                     b.Property<double>("Price")
                         .HasColumnType("double");
+
+                    b.Property<int?>("Quantify")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -67,7 +78,12 @@ namespace stonewebapibreakeven.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("WalletId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WalletId");
 
                     b.ToTable("Products");
                 });
@@ -85,16 +101,46 @@ namespace stonewebapibreakeven.Migrations
 
             modelBuilder.Entity("stone_webapi_breakeven.Models.Wallet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("WalletId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<double>("Balance")
                         .HasColumnType("double");
 
-                    b.HasKey("Id");
+                    b.Property<double?>("FreeAmount")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("InvestedAmount")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("TotalAmount")
+                        .HasColumnType("double");
+
+                    b.HasKey("WalletId");
 
                     b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("stone_webapi_breakeven.Models.AccountBanking", b =>
+                {
+                    b.HasOne("stone_webapi_breakeven.Models.Wallet", "WalletId")
+                        .WithMany()
+                        .HasForeignKey("WalletId1");
+
+                    b.Navigation("WalletId");
+                });
+
+            modelBuilder.Entity("stone_webapi_breakeven.Models.Product", b =>
+                {
+                    b.HasOne("stone_webapi_breakeven.Models.Wallet", null)
+                        .WithMany("Products")
+                        .HasForeignKey("WalletId");
+                });
+
+            modelBuilder.Entity("stone_webapi_breakeven.Models.Wallet", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

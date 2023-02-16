@@ -17,6 +17,9 @@ namespace stone_webapi_breakeven.Services
         {
             Wallet wallet = new Wallet();
             wallet.Balance = 0;
+            wallet.InvestedAmount = 0;
+            wallet.TotalAmount = 0;
+            wallet.FreeAmount = 0;
             _context.Wallets.Add(wallet); ;
             _context.SaveChanges();
 
@@ -28,11 +31,14 @@ namespace stone_webapi_breakeven.Services
 
             Wallet wallet = new Wallet();
             wallet.Balance = 0;
+            wallet.InvestedAmount = 0;
+            wallet.TotalAmount = 0;
+            wallet.FreeAmount = 0;
             _context.Wallets.Add(wallet); ;
             _context.SaveChanges();
-            accountBanking.WalletId = wallet.Id;
+            accountBanking.WalletId = wallet.WalletId;
 
-            return wallet.Id;
+            return wallet.WalletId;
         }
     }
 }

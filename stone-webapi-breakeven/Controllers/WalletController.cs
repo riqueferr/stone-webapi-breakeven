@@ -2,6 +2,7 @@
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.Models;
 using stone_webapi_breakeven.Services;
+using System.Xml.Linq;
 
 namespace stone_webapi_breakeven.Controllers
 {
@@ -25,7 +26,7 @@ namespace stone_webapi_breakeven.Controllers
         {
            Wallet wallet =  _walletService.CreateWallet();
 
-            return CreatedAtAction(nameof(GetWalletById), new { id = wallet.Id }, wallet);
+            return CreatedAtAction(nameof(GetWalletById), new { id = wallet.WalletId }, wallet);
         }
 
 
@@ -33,8 +34,17 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetWalletById(int id)
         {
 
-            var result = _context.Wallets.FirstOrDefault(wallet => wallet.Id == id);
+            var result = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
+            var fkResult = _context.AccountBankingProducts.Where(fkResult => fkResult.WalletId == id).ToList();
             if (result == null) return NotFound();
+
+            if (fkResult != null)
+            {
+                foreach (var product in fkResult)
+                {
+                    result.Products.Add(product);
+                }
+            }
 
             return Ok(result);
         }

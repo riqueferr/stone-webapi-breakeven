@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
+using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
 
 namespace stone_webapi_breakeven.Controllers
@@ -49,6 +50,18 @@ namespace stone_webapi_breakeven.Controllers
         public IEnumerable<Product> Teste([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
             return _context.Products.Where(c => c.Price > 1000);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateProduct(int id, [FromBody] ProductDto productDto)
+        {
+
+            var product = _context.Products.FirstOrDefault(
+             product => product.Id == id);
+
+            if (product == null) return NotFound();
+            _context.SaveChanges();
+            return NoContent();
         }
 
     }
