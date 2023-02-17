@@ -47,10 +47,17 @@ namespace stone_webapi_breakeven.Controllers
             {
                 foreach (var product in products)
                 {
-                    var p = _context.Products.FirstOrDefault(p => p.Id == product.ProductId);
-                    product.Percentage = ((p.Price - product.AverageTicket) / p.Price);
+                    var productPersist = _context.Products.FirstOrDefault(p => p.Id == product.ProductId);
+                    product.Percentage = ((productPersist.Price - product.AverageTicket) / product.AverageTicket);
+                    product.TotalPrice += product.TotalPrice * product.Percentage;
+
+                    var diferent = product.TotalPrice - (product.AverageTicket * product.Quantify);
+
+                    result.TotalAmount += (diferent);
+                    
                     result.Products.Add(product);
                 }
+                result.InvestedAmount = result.TotalAmount - result.FreeAmount;
             }
 
             return Ok(result);
@@ -72,31 +79,6 @@ namespace stone_webapi_breakeven.Controllers
         {
 
             _walletService.OrderBuyOrSellProduct(id, productDto);
-            /*var product = _context.Products.FirstOrDefault(product => product.Id == productDto.Id);
-            var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
-
-            if (product == null || wallet == null) { return NotFound(); }
-
-
-            var calcTotalPrice = product.Price * productDto.Quantify;
-            if (wallet.FreeAmount >= calcTotalPrice)
-            {
-                wallet.FreeAmount -= calcTotalPrice;
-                wallet.InvestedAmount += calcTotalPrice;
-
-                AccountBankingProduct accountBankingProduct = new AccountBankingProduct();
-                accountBankingProduct.WalletId = wallet.WalletId;
-                accountBankingProduct.ProductId = product.Id;
-                accountBankingProduct.Quantify = productDto.Quantify;
-                accountBankingProduct.TotalPrice = calcTotalPrice;
-
-                // accountBankingProduct.ActualPrice = product.Price;
-
-                _context.AccountBankingProducts.Add(accountBankingProduct);
-
-
-                _context.SaveChanges();
-            }*/
 
             return Ok();
         }

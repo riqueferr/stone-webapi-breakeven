@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
@@ -12,10 +13,12 @@ namespace stone_webapi_breakeven.Controllers
     {
 
         private ReadContext _context;
+        private IMapper _mapper;
 
-        public ProductController(ReadContext context)
+        public ProductController(ReadContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -58,6 +61,8 @@ namespace stone_webapi_breakeven.Controllers
 
             var product = _context.Products.FirstOrDefault(
              product => product.Id == id);
+
+            product.Price = productDto.Price;
 
             if (product == null) return NotFound();
             _context.SaveChanges();

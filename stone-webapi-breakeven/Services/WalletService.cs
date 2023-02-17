@@ -53,14 +53,14 @@ namespace stone_webapi_breakeven.Services
             if (formatText == TransactionStatus.Deposit.ToString())
             {
                 wallet.FreeAmount += walletDto.Balance;
-                wallet.TotalAmount += walletDto.Balance;
+                wallet.TotalAmount += wallet.FreeAmount + wallet.InvestedAmount;
                 _context.SaveChanges();
 
                 return true;
             } else if (formatText == TransactionStatus.Withdraw.ToString())
             {
                 wallet.FreeAmount -= walletDto.Balance;
-                wallet.TotalAmount -= walletDto.Balance;
+                wallet.TotalAmount -= wallet.FreeAmount + wallet.InvestedAmount;
                 _context.SaveChanges();
                 return true;
             }
@@ -84,35 +84,41 @@ namespace stone_webapi_breakeven.Services
 
         public bool OrderBuyOrSellProduct(int id, ProductDto productDto)
         {
+            productDto.Action = char.ToUpper(productDto.Action[0]) + productDto.Action.Substring(1);
             var product = _context.Products.FirstOrDefault(product => product.Id == productDto.Id);
             var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
 
             var calcTotalPrice = CalculateTotalPriceBuyOrSell(product.Price, productDto.Quantify);
 
-            if (wallet.FreeAmount >= calcTotalPrice && product.Quantify >= productDto.Quantify)
+            if (productDto.Action == TransactionStatus.Buy.ToString())
             {
-                wallet.FreeAmount -= calcTotalPrice;
-                wallet.InvestedAmount += calcTotalPrice;
+                if (wallet.FreeAmount >= calcTotalPrice && product.Quantify >= productDto.Quantify)
+                {
+                    wallet.FreeAmount -= calcTotalPrice;
+                    wallet.InvestedAmount += calcTotalPrice;
 
-                AccountBankingProduct accountBankingProduct = new AccountBankingProduct();
-                accountBankingProduct.WalletId = wallet.WalletId;
-                accountBankingProduct.ProductId = product.Id;
-                accountBankingProduct.Quantify = productDto.Quantify;
-                accountBankingProduct.TotalPrice = calcTotalPrice;
-                accountBankingProduct.AverageTicket = product.Price;
+                    AccountBankingProduct accountBankingProduct = new AccountBankingProduct();
+                    accountBankingProduct.WalletId = wallet.WalletId;
+                    accountBankingProduct.ProductId = product.Id;
+                    accountBankingProduct.Quantify = productDto.Quantify;
+                    accountBankingProduct.TotalPrice = calcTotalPrice;
+                    accountBankingProduct.AverageTicket = product.Price;
 
-                _context.AccountBankingProducts.Add(accountBankingProduct);
+                    _context.AccountBankingProducts.Add(accountBankingProduct);
+
+                    _context.SaveChanges();
+                    return true;
+                }
+            } else if (productDto.Action == TransactionStatus.Sell.ToString())
+            {
+                var productSell = _context.AccountBankingProducts.FirstOrDefault(x => x.ProductId== productDto.Id);
+                wallet.InvestedAmount -= productSell.TotalPrice;
+                wallet.TotalAmount += productSell.TotalPrice;
+                productSell.Quantify -= productSell.Quantify;
 
                 _context.SaveChanges();
                 return true;
             }
-
-/*            if (productDto.Quantify > 0)
-            {
-                wallet.FreeAmount += calcTotalPrice;
-                product.Quantify += productDto.Quantify;
-
-            }*/
 
             return false;
         }
