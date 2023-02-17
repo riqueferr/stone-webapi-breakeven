@@ -12,5 +12,7 @@ namespace stone_webapi_breakeven.Models
         public int ProductId { get; set; }
         public int Quantify { get; set; }
         public double TotalPrice { get; set; }
+        public double Percentage { get; set; }
+        public double AverageTicket { get; set; }
     }
 }

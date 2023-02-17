@@ -3,7 +3,7 @@
     public enum TransactionStatus
     {
         Deposit,
-        WithDraw,
+        Withdraw,
         Buy,
         Sell
     }
