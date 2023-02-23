@@ -38,10 +38,10 @@ namespace stone_webapi_breakeven.Controllers
         [HttpGet("{id}")]
         public IActionResult GetWalletById(int id)
         {
-            var result = _walletService.GetWalletById(id);
+            var walletPersist = _walletService.GetWalletById(id);
             var products = _walletService.GetWalletByIdAndProductsDetails(id);
 
-            if (result == null) return NotFound();
+            if (walletPersist == null) return NotFound();
 
             if (products != null)
             {
@@ -53,14 +53,14 @@ namespace stone_webapi_breakeven.Controllers
 
                     var diferent = product.TotalPrice - (product.AverageTicket * product.Quantify);
 
-                    result.TotalAmount += (diferent);
-                    
-                    result.Products.Add(product);
+                    walletPersist.TotalAmount += diferent;
+
+                    walletPersist.Products.Add(product);
                 }
-                result.InvestedAmount = result.TotalAmount - result.FreeAmount;
+                walletPersist.InvestedAmount = walletPersist.TotalAmount - walletPersist.FreeAmount;
             }
 
-            return Ok(result);
+            return Ok(walletPersist);
         }
 
         [HttpPut("{id}/DepositOrWithdraw")]

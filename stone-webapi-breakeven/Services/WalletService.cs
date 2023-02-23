@@ -105,16 +105,30 @@ namespace stone_webapi_breakeven.Services
                     accountBankingProduct.AverageTicket = product.Price;
 
                     _context.AccountBankingProducts.Add(accountBankingProduct);
-
                     _context.SaveChanges();
                     return true;
                 }
             } else if (productDto.Action == TransactionStatus.Sell.ToString())
             {
                 var productSell = _context.AccountBankingProducts.FirstOrDefault(x => x.ProductId== productDto.Id);
+
+                var calculatePercentage = ((product.Price - productSell.AverageTicket) / productSell.AverageTicket);
+
                 wallet.InvestedAmount -= productSell.TotalPrice;
-                wallet.TotalAmount += productSell.TotalPrice;
+
+                
+                wallet.FreeAmount += productSell.TotalPrice + (productSell.TotalPrice * calculatePercentage);
+                wallet.TotalAmount =  wallet.InvestedAmount + wallet.FreeAmount + (productSell.TotalPrice * calculatePercentage);
+
+
+
+
                 productSell.Quantify -= productSell.Quantify;
+
+                if (productSell.Quantify == 0)
+                {
+                    _context.AccountBankingProducts.Remove(productSell);
+                }
 
                 _context.SaveChanges();
                 return true;
