@@ -7,12 +7,12 @@ namespace stone_webapi_breakeven.Services
     public class AccountBankingService : IAccountBankingService
     {
         private ReadContext _context;
-        private WalletService _walletService;
+        private IWalletService _walletService;
 
-        public AccountBankingService(ReadContext context)
+        public AccountBankingService(ReadContext context, IWalletService service)
         {
             _context = context;
-            _walletService = new WalletService(context);
+            _walletService = service;
         }
 
         public int CreateAccountBanking(AccountBanking accountBanking)
@@ -28,6 +28,19 @@ namespace stone_webapi_breakeven.Services
             _context.SaveChanges();
 
             return accountBanking.AccountBankingId;
+        }
+
+        public AccountBanking GetAccountBankingById(int id)
+        {
+           var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
+            return accountBanking;
+        }
+
+        public IEnumerable<AccountBanking> GetAllAccountsBanking() => _context.AccountsBanking.ToList();
+
+        public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake(int skip, int take)
+        {
+            return _context.AccountsBanking.Skip(skip).Take(take);
         }
     }
 }

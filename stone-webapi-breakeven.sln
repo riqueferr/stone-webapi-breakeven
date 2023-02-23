@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stone-webapi-breakeven", "stone-webapi-breakeven\stone-webapi-breakeven.csproj", "{309563A6-C4AD-44A3-89EE-F5CB56E202F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "stone-webapi-breakeven", "stone-webapi-breakeven\stone-webapi-breakeven.csproj", "{309563A6-C4AD-44A3-89EE-F5CB56E202F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{32B70B46-2D45-419E-89EF-CC3B62C69B50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{309563A6-C4AD-44A3-89EE-F5CB56E202F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{309563A6-C4AD-44A3-89EE-F5CB56E202F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{309563A6-C4AD-44A3-89EE-F5CB56E202F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32B70B46-2D45-419E-89EF-CC3B62C69B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32B70B46-2D45-419E-89EF-CC3B62C69B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32B70B46-2D45-419E-89EF-CC3B62C69B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32B70B46-2D45-419E-89EF-CC3B62C69B50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

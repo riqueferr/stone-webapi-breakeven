@@ -13,5 +13,7 @@ namespace stone_webapi_breakeven.Services
         Wallet GetWalletById(int id);
         bool DepositOrWithdrawWallet(int id, WalletDto walletDto);
         bool OrderBuyOrSellProduct(int id, ProductDto productDto);
+
+        Wallet CalculateProductToWallet(IEnumerable<AccountBankingProduct> products, Wallet wallet);
     }
 }

@@ -43,7 +43,8 @@ namespace stone_webapi_breakeven.Controllers
 
             if (walletPersist == null) return NotFound();
 
-            if (products != null)
+            _walletService.CalculateProductToWallet(products, walletPersist);
+            /*if (products != null)
             {
                 foreach (var product in products)
                 {
@@ -58,7 +59,7 @@ namespace stone_webapi_breakeven.Controllers
                     walletPersist.Products.Add(product);
                 }
                 walletPersist.InvestedAmount = walletPersist.TotalAmount - walletPersist.FreeAmount;
-            }
+            }*/
 
             return Ok(walletPersist);
         }

@@ -41,7 +41,7 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetAccountBankingById(int id)
         {
 
-            var result = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
+            var result = _service.GetAccountBankingById(id);
             if (result == null) return NotFound();
             
             return Ok(result);
@@ -51,16 +51,17 @@ namespace stone_webapi_breakeven.Controllers
         [HttpGet]
         public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
-            return _context.AccountsBanking.Skip(skipe).Take(take);
+            var result = _service.GetAccountBankingSkipAndTake(skipe, take);
+
+            return result;
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateAccountBanking(int id, [FromBody] AccountBankingDto accountBankingDto)
         {
-            var accountBanking = _context.AccountsBanking.FirstOrDefault(
-                accountBanking => accountBanking.AccountBankingId == id);
+            var accountBanking = _service.GetAccountBankingById(id);
 
-            if(accountBanking == null) return NotFound();
+            if (accountBanking == null) return NotFound();
 
             _mapper.Map(accountBankingDto, accountBanking);
             _context.SaveChanges();
@@ -70,7 +71,7 @@ namespace stone_webapi_breakeven.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAccountBanking(int id)
         {
-            var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
+            var accountBanking = _service.GetAccountBankingById(id);
             if (accountBanking== null) return NotFound();
 
             _context.Remove(accountBanking);
@@ -79,9 +80,10 @@ namespace stone_webapi_breakeven.Controllers
         }
 
 
-        [HttpGet("test")]
+        [HttpGet("/status")]
         public IEnumerable<AccountBanking> Test([FromQuery] string status)
         {
+
             return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active);
         }
 

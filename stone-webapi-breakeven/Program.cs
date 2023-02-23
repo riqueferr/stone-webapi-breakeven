@@ -16,6 +16,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAccountBankingService, AccountBankingService>();
 builder.Services.AddTransient<IWalletService, WalletService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<IAccountBankingProductConverter, AccountBankingProductConverter>();
 //builder.Services.AddTransient<IAccountProductService, AccountBankingService>();
