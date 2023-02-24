@@ -89,14 +89,14 @@ namespace stone_webapi_breakeven.Services
         public bool OrderBuyOrSellProduct(int id, ProductDto productDto)
         {
             productDto.Action = char.ToUpper(productDto.Action[0]) + productDto.Action.Substring(1);
-            var product = _context.Products.FirstOrDefault(product => product.Id == productDto.Id);
+            var product = _context.Products.FirstOrDefault(product => product.Title == productDto.Title);
             var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
 
             var calcTotalPrice = CalculateTotalPriceBuyOrSell(product.Price, productDto.Quantify);
 
             if (productDto.Action == TransactionStatus.Buy.ToString())
             {
-                CreateProductInWallet(wallet, product, productDto, calcTotalPrice);
+                CreateBuyProductInWallet(wallet, product, productDto, calcTotalPrice);
             }
             else if (productDto.Action == TransactionStatus.Sell.ToString())
             {
@@ -189,7 +189,7 @@ namespace stone_webapi_breakeven.Services
             }
         }
 
-        private bool CreateProductInWallet(Wallet wallet, Product product, ProductDto productDto, double calcTotalPrice)
+        private bool CreateBuyProductInWallet(Wallet wallet, Product product, ProductDto productDto, double calcTotalPrice)
         {
             if (wallet.FreeAmount >= calcTotalPrice && product.Quantify >= productDto.Quantify)
             {

@@ -63,7 +63,7 @@ namespace stone_webapi_breakeven.Controllers
 
             var product = _service.GetProductById(id);
 
-            product.Price = productDto.Price;
+            _service.ConverterProduct(product, productDto);
 
             if (product == null) return NotFound();
             _context.SaveChanges();

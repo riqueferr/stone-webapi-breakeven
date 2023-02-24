@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
+using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
 
 namespace stone_webapi_breakeven.Services
@@ -14,6 +15,15 @@ namespace stone_webapi_breakeven.Services
         {
             _context = context;
         }
+
+        public void ConverterProduct(Product product, ProductDto productDto)
+        {
+            if (productDto.Price != null)
+            {
+                product.Price = productDto.Price;
+            }
+        }
+
         public int CreateProduct(Product product)
         {
             if(product != null)
