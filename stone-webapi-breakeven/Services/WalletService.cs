@@ -179,13 +179,13 @@ namespace stone_webapi_breakeven.Services
             if (text == TransactionStatus.Deposit.ToString())
             {
                 wallet.FreeAmount += walletDto.Balance;
-                wallet.TotalAmount += wallet.FreeAmount + wallet.InvestedAmount;
+                wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
             }
 
             if (text == TransactionStatus.Withdraw.ToString())
             {
                 wallet.FreeAmount -= walletDto.Balance;
-                wallet.TotalAmount -= wallet.FreeAmount + wallet.InvestedAmount;
+                wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
             }
         }
 
