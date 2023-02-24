@@ -1,4 +1,5 @@
-﻿using stone_webapi_breakeven.Models;
+﻿using stone_webapi_breakeven.Enums;
+using stone_webapi_breakeven.Models;
 
 namespace stone_webapi_breakeven.Services
 {
@@ -6,5 +7,7 @@ namespace stone_webapi_breakeven.Services
     {
         IEnumerable<Extract> GetAll();
         IEnumerable<Extract> GetExtractByWalletId(int walletId);
+
+        void RegisterTransaction(int walletId, int? productId, TransactionStatus status, int? quantify, double? totalPrice);
     }
 }

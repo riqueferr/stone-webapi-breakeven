@@ -10,10 +10,12 @@ namespace stone_webapi_breakeven.Services
     {
 
         private readonly ReadContext _context;
+        private IExtractService _extractService;
 
-        public WalletService(ReadContext context)
+        public WalletService(ReadContext context, IExtractService extractService)
         {
             _context = context;
+            _extractService = extractService;
         }
 
         public Wallet CreateWallet()
@@ -53,6 +55,7 @@ namespace stone_webapi_breakeven.Services
             if (formatText == TransactionStatus.Deposit.ToString())
             {
                 CalculateDepositOrWithDrawWallet(wallet, walletDto, formatText);
+                _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Deposit, null, walletDto.Balance);
                 _context.SaveChanges();
 
                 return true;
@@ -60,6 +63,7 @@ namespace stone_webapi_breakeven.Services
             else if (formatText == TransactionStatus.Withdraw.ToString())
             {
                 CalculateDepositOrWithDrawWallet(wallet, walletDto, formatText);
+                _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Withdraw, null, walletDto.Balance);
                 _context.SaveChanges();
 
                 return true;
@@ -96,6 +100,7 @@ namespace stone_webapi_breakeven.Services
 
             if (productDto.Action == TransactionStatus.Buy.ToString())
             {
+                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Buy, productDto.Quantify, calcTotalPrice);
                 CreateBuyProductInWallet(wallet, product, productDto, calcTotalPrice);
             }
             else if (productDto.Action == TransactionStatus.Sell.ToString())
@@ -104,14 +109,16 @@ namespace stone_webapi_breakeven.Services
 
                 var calculatePercentage = CalculatePercentage(product, productSell);
 
+                var priceSell = CalculateOperationSell(productSell, productDto);
 
-                productSell.TotalPrice -= (double)(productSell.AverageTicket * productDto.Quantify);
+                productSell.TotalPrice -= priceSell;
 
-                wallet.InvestedAmount -= (double)(productSell.AverageTicket * productDto.Quantify);
+                wallet.InvestedAmount -= priceSell;
 
-                wallet.FreeAmount += ((double)(productSell.AverageTicket * productDto.Quantify)) + (((double)(productSell.AverageTicket * productDto.Quantify)) *calculatePercentage);
+                wallet.FreeAmount += ((double)(productSell.AverageTicket * productDto.Quantify)) + (((double)(productSell.AverageTicket * productDto.Quantify)) * calculatePercentage);
                 wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
 
+                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, priceSell);
 
                 RemoveQuantifyProduct(productSell, productDto);
 
@@ -210,7 +217,15 @@ namespace stone_webapi_breakeven.Services
                 return true;
             }
             return false;
+
+            
         }
+        private double CalculateOperationSell(WalletProduct productSell, ProductDto productDto)
+        {
+            var result = (double)(productSell.AverageTicket * productDto.Quantify);
+            return result;
+        }
+
 
     }
 }

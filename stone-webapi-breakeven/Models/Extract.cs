@@ -8,8 +8,8 @@ namespace stone_webapi_breakeven.Models
         [Key]
         public int ExtractId { get; set; }
         public int WalletId { get; set; }
-        public int ProductId { get; set; }
-        public TransactionStatus TransactionStatus { get; set; }
+        public int? ProductId { get; set; }
+        public string TransactionStatus { get; set; }
         public int? Quantify { get; set; }
         public double? TotalPrice { get; set; }
         public DateTime DateTime { get; set; }
