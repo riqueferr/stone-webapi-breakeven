@@ -9,7 +9,7 @@ namespace stone_webapi_breakeven.Models
         public int AccountBankingProductId { get; set; }
 
         public int WalletId { get; set; }
-        public int ProductId { get; set; }
+        public string ProductTitle { get; set; }
         public int Quantify { get; set; }
         public double TotalPrice { get; set; }
         public double Percentage { get; set; }

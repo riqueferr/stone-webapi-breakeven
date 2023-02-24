@@ -11,7 +11,7 @@ namespace stone_webapi_breakeven.Data
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Product> Products{ get; set; }
         public DbSet<Extract> Extracts { get; set; }
-        public DbSet<WalletProduct> AccountBankingProducts { get; set; }
+        public DbSet<WalletProduct> WalletProducts { get; set; }
 
     }
 }

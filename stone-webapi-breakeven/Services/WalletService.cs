@@ -81,7 +81,7 @@ namespace stone_webapi_breakeven.Services
 
         public ICollection<WalletProduct> GetWalletByIdAndProductsDetails(int id)
         {
-            var result = _context.AccountBankingProducts.Where(x => x.WalletId == id).ToList();
+            var result = _context.WalletProducts.Where(x => x.WalletId == id).ToList();
 
             return result;
         }
@@ -100,18 +100,20 @@ namespace stone_webapi_breakeven.Services
             }
             else if (productDto.Action == TransactionStatus.Sell.ToString())
             {
-                var productSell = _context.AccountBankingProducts.FirstOrDefault(x => x.ProductId == productDto.Id);
+                var productSell = _context.WalletProducts.FirstOrDefault(x => x.ProductTitle == productDto.Title);
 
                 var calculatePercentage = CalculatePercentage(product, productSell);
 
-                wallet.InvestedAmount -= productSell.TotalPrice;
+
+                productSell.TotalPrice -= (double)(productSell.AverageTicket * productDto.Quantify);
+
+                wallet.InvestedAmount -= (double)(productSell.AverageTicket * productDto.Quantify);
+
+                wallet.FreeAmount += ((double)(productSell.AverageTicket * productDto.Quantify)) + (((double)(productSell.AverageTicket * productDto.Quantify)) *calculatePercentage);
+                wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
 
 
-                wallet.FreeAmount += productSell.TotalPrice + (productSell.TotalPrice * calculatePercentage);
-                wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount + (productSell.TotalPrice * calculatePercentage);
-
-
-                RemoveQuantifyProduct(productSell);
+                RemoveQuantifyProduct(productSell, productDto);
 
                 _context.SaveChanges();
                 return true;
@@ -126,7 +128,7 @@ namespace stone_webapi_breakeven.Services
             {
                 foreach (var product in products)
                 {
-                    var productPersist = _context.Products.FirstOrDefault(p => p.Id == product.ProductId);
+                    var productPersist = _context.Products.FirstOrDefault(p => p.Title == product.ProductTitle);
                     product.Percentage = ((productPersist.Price - product.AverageTicket) / product.AverageTicket);
                     product.TotalPrice += product.TotalPrice * product.Percentage;
 
@@ -152,12 +154,12 @@ namespace stone_webapi_breakeven.Services
             return calcTotalPrice;
         }
 
-        private void RemoveQuantifyProduct(WalletProduct productSell)
+        private void RemoveQuantifyProduct(WalletProduct productSell, ProductDto productDto)
         {
-            productSell.Quantify -= productSell.Quantify;
+            productSell.Quantify -= productDto.Quantify;
             if (productSell.Quantify == 0)
             {
-                _context.AccountBankingProducts.Remove(productSell);
+                _context.WalletProducts.Remove(productSell);
             }
         }
 
@@ -196,14 +198,14 @@ namespace stone_webapi_breakeven.Services
                 wallet.FreeAmount -= calcTotalPrice;
                 wallet.InvestedAmount += calcTotalPrice;
 
-                WalletProduct accountBankingProduct = new WalletProduct();
-                accountBankingProduct.WalletId = wallet.WalletId;
-                accountBankingProduct.ProductId = product.Id;
-                accountBankingProduct.Quantify = productDto.Quantify;
-                accountBankingProduct.TotalPrice = calcTotalPrice;
-                accountBankingProduct.AverageTicket = product.Price;
+                WalletProduct walletProducts = new WalletProduct();
+                walletProducts.WalletId = wallet.WalletId;
+                walletProducts.ProductTitle = product.Title;
+                walletProducts.Quantify = productDto.Quantify;
+                walletProducts.TotalPrice = calcTotalPrice;
+                walletProducts.AverageTicket = product.Price;
 
-                _context.AccountBankingProducts.Add(accountBankingProduct);
+                _context.WalletProducts.Add(walletProducts);
                 _context.SaveChanges();
                 return true;
             }
