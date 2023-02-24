@@ -115,10 +115,10 @@ namespace stone_webapi_breakeven.Services
 
                 wallet.InvestedAmount -= priceSell;
 
-                wallet.FreeAmount += ((double)(productSell.AverageTicket * productDto.Quantify)) + (((double)(productSell.AverageTicket * productDto.Quantify)) * calculatePercentage);
+                wallet.FreeAmount += (priceSell) + ((priceSell) * calculatePercentage);
                 wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
 
-                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, priceSell);
+                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, ((priceSell) * calculatePercentage));
 
                 RemoveQuantifyProduct(productSell, productDto);
 
