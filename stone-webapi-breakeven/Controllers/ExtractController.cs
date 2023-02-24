@@ -25,15 +25,8 @@ namespace stone_webapi_breakeven.Controllers
         public IEnumerable<Extract> GetExtractByWalletId(int walletId)
         {
             IEnumerable<Extract> result;
-            if (walletId == null)
-            {
-                result = _service.GetAll();
-            } else
-            {
-                result = _service.GetExtractByWalletId(walletId);
-            }
 
-            return result;
-        }
+            return result = _service.GetExtractByWalletId(walletId);
+    }
     }
 }
