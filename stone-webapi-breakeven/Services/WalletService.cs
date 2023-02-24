@@ -79,7 +79,7 @@ namespace stone_webapi_breakeven.Services
             return result;
         }
 
-        public ICollection<AccountBankingProduct> GetWalletByIdAndProductsDetails(int id)
+        public ICollection<WalletProduct> GetWalletByIdAndProductsDetails(int id)
         {
             var result = _context.AccountBankingProducts.Where(x => x.WalletId == id).ToList();
 
@@ -120,7 +120,7 @@ namespace stone_webapi_breakeven.Services
             return false;
         }
 
-        public Wallet? CalculateProductToWallet(IEnumerable<AccountBankingProduct> products, Wallet walletPersist)
+        public Wallet? CalculateProductToWallet(IEnumerable<WalletProduct> products, Wallet walletPersist)
         {
             if (products != null)
             {
@@ -152,7 +152,7 @@ namespace stone_webapi_breakeven.Services
             return calcTotalPrice;
         }
 
-        private void RemoveQuantifyProduct(AccountBankingProduct productSell)
+        private void RemoveQuantifyProduct(WalletProduct productSell)
         {
             productSell.Quantify -= productSell.Quantify;
             if (productSell.Quantify == 0)
@@ -161,7 +161,7 @@ namespace stone_webapi_breakeven.Services
             }
         }
 
-        private double CalculatePercentage(Product product, AccountBankingProduct productSell)
+        private double CalculatePercentage(Product product, WalletProduct productSell)
         {
             var result = ((product.Price - productSell.AverageTicket) / productSell.AverageTicket);
 
@@ -196,7 +196,7 @@ namespace stone_webapi_breakeven.Services
                 wallet.FreeAmount -= calcTotalPrice;
                 wallet.InvestedAmount += calcTotalPrice;
 
-                AccountBankingProduct accountBankingProduct = new AccountBankingProduct();
+                WalletProduct accountBankingProduct = new WalletProduct();
                 accountBankingProduct.WalletId = wallet.WalletId;
                 accountBankingProduct.ProductId = product.Id;
                 accountBankingProduct.Quantify = productDto.Quantify;

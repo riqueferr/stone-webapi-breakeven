@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace stone_webapi_breakeven.Models
 {
-    public class AccountBankingProduct
+    public class WalletProduct
     {
         [Key]
         public int AccountBankingProductId { get; set; }

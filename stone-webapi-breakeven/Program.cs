@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using stone_webapi_breakeven.Conveters;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.Services;
 
@@ -16,9 +15,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAccountBankingService, AccountBankingService>();
 builder.Services.AddTransient<IWalletService, WalletService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddTransient<IExtractService, ExtractService>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTransient<IAccountBankingProductConverter, AccountBankingProductConverter>();
+//builder.Services.AddTransient<IAccountBankingProductConverter, AccountBankingProductConverter>();
 //builder.Services.AddTransient<IAccountProductService, AccountBankingService>();
 
 builder.Services.AddControllers();
