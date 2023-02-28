@@ -14,7 +14,6 @@
 > - .NET 6
 > - Banco de dados: Mysql
 
-
 > Inicialização:
 > - CLone o repositório git;
 > - Congifure o banco de dados Mysql no "Localhost", a porta padrão utilizada é "3306";
