@@ -6,7 +6,7 @@
 > - AccountBanking: Necessário informar um "document" para a criação.
 > - Wallet: É a carteira que cada AccountBanking terá! De forma dinâmica, ao criar uma AccountBanking, será criado uma Wallet em segundo momento que será vinculada a AccountBanking que foi criada. A mesma é utilizada para depósito e/ou retirada de valores;
 > - Products: Os produtos (ativos) que serão criados e estarão disponíveis para a compra e/ou venda;
-> WalletProduct: Como Wallet e Product são N:N, essa é a entidade que fará a "ponte";
+> - WalletProduct: Como Wallet e Product são N:N, essa é a entidade que fará a "ponte";
 > - Extract: Todos as operações de compra e venda, assim como, depósito e retirada de valores serão registradas nesta entidade;
 
 > Ferramentas:
