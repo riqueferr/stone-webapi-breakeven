@@ -16,5 +16,6 @@
 
 > Inicialização:
 > - CLone o repositório git;
-> - Congifure o banco de dados Mysql no "Localhost", a porta padrão utilizada é "3306";
-> - Será necessário login e senha para acesso do banco de dados, os mesmos encontra-se no arquivo: appsettings.json
+> - Congifure o banco de dados Mysql no server "localhost", a porta padrão utilizada é "3306". Além do database, deve se chamar "breakeven";
+> - Será necessário login e senha para acesso do banco de dados, os mesmos encontra-se no arquivo: "appsettings.json";
+> - Os demais pacotes utilizados já estão inclusos no projeto;
