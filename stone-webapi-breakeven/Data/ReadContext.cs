@@ -5,6 +5,9 @@ namespace stone_webapi_breakeven.Data
 {
     public class ReadContext :DbContext
     {
+        public ReadContext()
+        {
+        }
 
         public ReadContext(DbContextOptions<ReadContext> options) : base(options) { }
         public DbSet<AccountBanking> AccountsBanking { get; set; }

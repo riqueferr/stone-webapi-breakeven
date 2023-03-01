@@ -8,7 +8,6 @@ namespace stone_webapi_breakeven.Services
 {
     public class ExtractService : IExtractService
     {
-
         private ReadContext _context;
 
         public ExtractService(ReadContext context)
@@ -18,8 +17,7 @@ namespace stone_webapi_breakeven.Services
 
         public IEnumerable<Extract> GetAll()
         {
-            var result = _context.Extracts.ToList();
-            return result;
+            return _context.Extracts.ToList();
         }
 
         public IEnumerable<Extract> GetExtractByWalletId(int walletId)

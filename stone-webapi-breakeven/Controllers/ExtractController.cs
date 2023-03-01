@@ -10,23 +10,16 @@ namespace stone_webapi_breakeven.Controllers
     public class ExtractController
     {
 
-        private ReadContext _context;
         private IExtractService _service;
-        public ExtractController(ReadContext context, IExtractService service)
+        public ExtractController(IExtractService service)
         {
-            _context = context;
             _service = service;
         }
-
-
-
 
         [HttpGet("{id}")]
         public IEnumerable<Extract> GetExtractByWalletId(int walletId)
         {
-            IEnumerable<Extract> result;
-
-            return result = _service.GetExtractByWalletId(walletId);
-    }
+            return _service.GetExtractByWalletId(walletId);
+        }
     }
 }

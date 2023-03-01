@@ -17,11 +17,7 @@ namespace stone_webapi_breakeven.Services
 
         public int CreateAccountBanking(AccountBanking accountBanking)
         {
-
-            //Validators
-
-            //Context
-            accountBanking.Status = AccountBankingStatus.Active;
+            accountBanking.Status = AccountBankingStatus.Active.ToString();
             accountBanking.OpentedIn = DateTime.Now;
             accountBanking.WalletId = _walletService.CreateWalletForAccountBanking(accountBanking);
             _context.AccountsBanking.Add(accountBanking);
@@ -32,8 +28,7 @@ namespace stone_webapi_breakeven.Services
 
         public AccountBanking GetAccountBankingById(int id)
         {
-           var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
-            return accountBanking;
+            return _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
         }
 
         public IEnumerable<AccountBanking> GetAllAccountsBanking() => _context.AccountsBanking.ToList();

@@ -41,10 +41,13 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetAccountBankingById(int id)
         {
 
-            var result = _service.GetAccountBankingById(id);
-            if (result == null) return NotFound();
-            
-            return Ok(result);
+            var accountBanking = _service.GetAccountBankingById(id);
+            if (accountBanking is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(accountBanking);
         }
 
 
@@ -61,7 +64,10 @@ namespace stone_webapi_breakeven.Controllers
         {
             var accountBanking = _service.GetAccountBankingById(id);
 
-            if (accountBanking == null) return NotFound();
+            if (accountBanking is null)
+            {
+                return NotFound();
+            }
 
             _mapper.Map(accountBankingDto, accountBanking);
             _context.SaveChanges();
@@ -84,7 +90,7 @@ namespace stone_webapi_breakeven.Controllers
         public IEnumerable<AccountBanking> Test([FromQuery] string status)
         {
 
-            return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active);
+            return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active.ToString());
         }
 
     }

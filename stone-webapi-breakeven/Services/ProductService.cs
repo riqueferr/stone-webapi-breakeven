@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
+using stone_webapi_breakeven.Exceptions;
 using stone_webapi_breakeven.Models;
 
 namespace stone_webapi_breakeven.Services
 {
     public class ProductService : IProductService
     {
-
         private ReadContext _context;
 
         public ProductService(ReadContext context)
@@ -33,16 +33,13 @@ namespace stone_webapi_breakeven.Services
                 return product.Id;
             } 
 
-            throw new Exception("O produto não foi criado");
-
+            throw new BreakevenException("O produto não foi criado");
 
         }
 
         public Product GetProductById(int id)
         {
-            var result = _context.Products.FirstOrDefault(product => product.Id == id);
-
-            return result;
+            return _context.Products.FirstOrDefault(product => product.Id == id);
         }
 
         public IEnumerable<Product> GetProductSkipAndTake(int skip, int take)

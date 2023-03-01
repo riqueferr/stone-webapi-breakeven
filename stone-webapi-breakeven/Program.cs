@@ -18,6 +18,9 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddTransient<IExtractService, ExtractService>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddMvc();
+builder.Services.AddControllers();
+
 //builder.Services.AddTransient<IAccountBankingProductConverter, AccountBankingProductConverter>();
 //builder.Services.AddTransient<IAccountProductService, AccountBankingService>();
 

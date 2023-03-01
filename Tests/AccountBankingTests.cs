@@ -1,5 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.Models;
 using stone_webapi_breakeven.Services;
@@ -10,42 +9,22 @@ namespace Tests
     {
 
         private readonly IAccountBankingService _accountBankingService;
+        private readonly IWalletService _walletService;
+        private readonly ReadContext _readContext;
 
-        public AccountBankingTests()
-        {
-            var service = new ServiceCollection();
-            service.AddTransient<IAccountBankingService, AccountBankingService>();
-            var provider = service.BuildServiceProvider();
-            _accountBankingService = provider.GetService<IAccountBankingService>();
-        }
-
-        /*[Fact]
+        [Fact]
         public void ConnectDataBase()
         {
-            var connect = new ReadContext();
+            ReadContext connect = new ReadContext();
             
-
-            try
+/*            try
             {
                 connect.Database.CanConnect();
             }
             catch (Exception ex)
             {
                 throw new Exception("Fail: " + ex.Message);
-            }
-        }*/
-
-        [Fact]
-        public void ListAccountBankingService()
-        {
-
-            //Act
-            ICollection<AccountBanking> list; //= _accountBankingService.
-
-
-            //Assert;
-            //Assert.NotNull(list);
+            }*/
         }
-
     }
 }

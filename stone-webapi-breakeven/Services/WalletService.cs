@@ -2,7 +2,9 @@
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Enums;
+using stone_webapi_breakeven.Exceptions;
 using stone_webapi_breakeven.Models;
+using System.Runtime.Serialization;
 
 namespace stone_webapi_breakeven.Services
 {
@@ -46,87 +48,84 @@ namespace stone_webapi_breakeven.Services
             return wallet.WalletId;
         }
 
-        public bool DepositOrWithdrawWallet(int id, WalletDto walletDto)
+        public void DepositOrWithdrawWallet(int id, WalletDto walletDto)
         {
+            var transactionStatus = ConverterStringFromTransactionEnum(walletDto.Action);
+            var wallet = GetWalletById(id);
 
-            var formatText = FormartAction(walletDto);
-            var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
 
-            if (formatText == TransactionStatus.Deposit.ToString())
+            switch (transactionStatus)
             {
-                CalculateDepositOrWithDrawWallet(wallet, walletDto, formatText);
-                _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Deposit, null, walletDto.Balance);
-                _context.SaveChanges();
+                case TransactionStatus.Deposit:
+                    CalculateDepositOrWithDrawWallet(wallet, walletDto, transactionStatus);
+                    _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Deposit, null, walletDto.Balance);
+                    _context.SaveChanges();
+                    break;
 
-                return true;
+                case TransactionStatus.Withdraw:
+                    CalculateDepositOrWithDrawWallet(wallet, walletDto, transactionStatus);
+                    _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Withdraw, null, walletDto.Balance);
+                    _context.SaveChanges();
+                    break;
+
+                default:
+                    throw new BreakevenException("Não é possível converter a Action informada para TransationEnum");
             }
-            else if (formatText == TransactionStatus.Withdraw.ToString())
-            {
-                CalculateDepositOrWithDrawWallet(wallet, walletDto, formatText);
-                _extractService.RegisterTransaction(wallet.WalletId, null, TransactionStatus.Withdraw, null, walletDto.Balance);
-                _context.SaveChanges();
-
-                return true;
-            }
-            else
-            {
-                throw new Exception("Action não localizada.");
-            }
-
-
         }
 
         public Wallet GetWalletById(int id)
         {
-            var result = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
-
-            return result;
+            return _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id); ;
         }
 
         public ICollection<WalletProduct> GetWalletByIdAndProductsDetails(int id)
         {
-            var result = _context.WalletProducts.Where(x => x.WalletId == id).ToList();
-
-            return result;
+            return _context.WalletProducts.Where(x => x.WalletId == id).ToList(); ;
         }
 
-        public bool OrderBuyOrSellProduct(int id, ProductDto productDto)
+        public void OrderBuyOrSellProduct(int id, ProductDto productDto)
         {
-            productDto.Action = char.ToUpper(productDto.Action[0]) + productDto.Action.Substring(1);
+            TransactionStatus status = ConverterStringFromTransactionEnum(productDto.Action);
             var product = _context.Products.FirstOrDefault(product => product.Title == productDto.Title);
             var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
 
             var calcTotalPrice = CalculateTotalPriceBuyOrSell(product.Price, productDto.Quantify);
 
-            if (productDto.Action == TransactionStatus.Buy.ToString())
+
+            switch (status)
             {
-                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Buy, productDto.Quantify, calcTotalPrice);
-                CreateBuyProductInWallet(wallet, product, productDto, calcTotalPrice);
+                case TransactionStatus.Buy:
+                    _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Buy, productDto.Quantify, calcTotalPrice);
+                    CreateBuyProductInWallet(wallet, product, productDto, calcTotalPrice);
+                    break;
+
+                case TransactionStatus.Sell:
+                    var productSell = _context.WalletProducts.FirstOrDefault(x => x.ProductTitle == productDto.Title);
+
+                    if (productSell == null)
+                    {
+                        throw new BreakevenException("Não é possível vender um produto que não consta em sua carteira");
+                    }
+
+                    var calculatePercentage = CalculatePercentage(product, productSell);
+
+                    var priceSell = CalculateOperationSell(productSell, productDto);
+
+                    productSell.TotalPrice -= priceSell;
+
+                    wallet.InvestedAmount -= priceSell;
+
+                    wallet.FreeAmount += (priceSell) + ((priceSell) * calculatePercentage);
+                    wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
+
+                    _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, ((priceSell) * calculatePercentage));
+
+                    RemoveQuantifyProduct(productSell, productDto);
+
+                    _context.SaveChanges();
+                    break;
             }
-            else if (productDto.Action == TransactionStatus.Sell.ToString())
-            {
-                var productSell = _context.WalletProducts.FirstOrDefault(x => x.ProductTitle == productDto.Title);
 
-                var calculatePercentage = CalculatePercentage(product, productSell);
-
-                var priceSell = CalculateOperationSell(productSell, productDto);
-
-                productSell.TotalPrice -= priceSell;
-
-                wallet.InvestedAmount -= priceSell;
-
-                wallet.FreeAmount += (priceSell) + ((priceSell) * calculatePercentage);
-                wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
-
-                _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, ((priceSell) * calculatePercentage));
-
-                RemoveQuantifyProduct(productSell, productDto);
-
-                _context.SaveChanges();
-                return true;
-            }
-
-            return false;
         }
 
         public Wallet? CalculateProductToWallet(IEnumerable<WalletProduct> products, Wallet walletPersist)
@@ -164,6 +163,7 @@ namespace stone_webapi_breakeven.Services
         private void RemoveQuantifyProduct(WalletProduct productSell, ProductDto productDto)
         {
             productSell.Quantify -= productDto.Quantify;
+
             if (productSell.Quantify == 0)
             {
                 _context.WalletProducts.Remove(productSell);
@@ -177,28 +177,45 @@ namespace stone_webapi_breakeven.Services
             return result;
         }
 
-        private string FormartAction(WalletDto walletDto)
+        private string FormartAction(string status)
         {
-            var text = char.ToUpper(walletDto.Action[0]) + walletDto.Action.Substring(1);
+            var text = char.ToUpper(status[0]).ToString();
+
+            for (var i = 1; i <= status.Length; i++) {
+                text += char.ToLower(status[i]).ToString();
+            }
+
             return text;
         }
 
-        private void CalculateDepositOrWithDrawWallet(Wallet wallet, WalletDto walletDto, string text)
+        private void CalculateDepositOrWithDrawWallet(Wallet wallet, WalletDto walletDto, TransactionStatus status)
         {
-            if (text == TransactionStatus.Deposit.ToString())
+
+            if (walletDto.Balance <= 0 )
             {
-                wallet.FreeAmount += walletDto.Balance;
-                wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
+                throw new BreakevenException("Não é possível depositar e/ou sacar valores menores ou iguais a 0 (zero).");
             }
 
-            if (text == TransactionStatus.Withdraw.ToString())
+            switch (status) 
             {
-                wallet.FreeAmount -= walletDto.Balance;
-                wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
+                case TransactionStatus.Deposit:
+                    wallet.FreeAmount += walletDto.Balance;
+                    wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
+                    break;
+
+                case TransactionStatus.Withdraw:
+                    if (wallet.FreeAmount < walletDto.Balance)
+                    {
+                        throw new BreakevenException("Valor informado para saque é maior do que está disponível.");
+                    }
+
+                    wallet.FreeAmount -= walletDto.Balance;
+                    wallet.TotalAmount = wallet.FreeAmount + wallet.InvestedAmount;
+                    break;
             }
         }
 
-        private bool CreateBuyProductInWallet(Wallet wallet, Product product, ProductDto productDto, double calcTotalPrice)
+        private void CreateBuyProductInWallet(Wallet wallet, Product product, ProductDto productDto, double calcTotalPrice)
         {
             if (wallet.FreeAmount >= calcTotalPrice && product.Quantify >= productDto.Quantify)
             {
@@ -214,16 +231,24 @@ namespace stone_webapi_breakeven.Services
 
                 _context.WalletProducts.Add(walletProducts);
                 _context.SaveChanges();
-                return true;
-            }
-            return false;
-
-            
+            }  
         }
         private double CalculateOperationSell(WalletProduct productSell, ProductDto productDto)
         {
             var result = (double)(productSell.AverageTicket * productDto.Quantify);
             return result;
+        }
+
+        private TransactionStatus ConverterStringFromTransactionEnum(string status)
+        {
+            var formatText = FormartAction(status);
+
+            if (Enum.TryParse(formatText, out TransactionStatus statusEnum))
+            {
+                return (TransactionStatus)Enum.Parse(typeof(TransactionStatus), formatText);
+            }
+
+            throw new BreakevenException("Não é possível converter a Action informada para TransationEnum");
         }
 
 

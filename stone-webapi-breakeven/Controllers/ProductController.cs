@@ -39,8 +39,10 @@ namespace stone_webapi_breakeven.Controllers
         {
 
             var result = _service.GetProductById(id);
-            if (result == null) return NotFound();
-            
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -51,6 +53,7 @@ namespace stone_webapi_breakeven.Controllers
             return _service.GetProductSkipAndTake(skipe, take);
         }
 
+        [Obsolete("Chamada obsoluta! Realizado apenas para estudo e compreensão de funcionalidades.")]
         [HttpGet("/PriceOrderByDesc")]
         public IEnumerable<Product> PriceOrderByDesc()
         {
@@ -65,7 +68,11 @@ namespace stone_webapi_breakeven.Controllers
 
             _service.ConverterProduct(product, productDto);
 
-            if (product == null) return NotFound();
+            if (product is null)
+            {
+                return NotFound();
+            }
+
             _context.SaveChanges();
             return NoContent();
         }

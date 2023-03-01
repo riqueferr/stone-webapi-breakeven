@@ -10,7 +10,7 @@ namespace stone_webapi_breakeven.Models
         public int AccountBankingId { get; set; }
         public string Document { get; set; }
 
-        public AccountBankingStatus Status { get; set; }
+        public string Status { get; set; }
 
         public DateTime OpentedIn { get; set; }
 
