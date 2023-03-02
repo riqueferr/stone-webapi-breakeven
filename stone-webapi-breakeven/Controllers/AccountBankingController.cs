@@ -26,6 +26,12 @@ namespace stone_webapi_breakeven.Controllers
             _mapper = mapper;
         }
 
+        public AccountBankingController(IMapper mapper, IAccountBankingService service)
+        {
+            _service = service;
+            _mapper = mapper;
+        }
+
         [HttpPost]
         public IActionResult CreateAccountBanking([FromBody] AccountBankingDto accountBankingDto)
         {
@@ -36,6 +42,11 @@ namespace stone_webapi_breakeven.Controllers
 
         }
 
+        [HttpGet]
+        public IEnumerable<AccountBanking> GetAllAccountBanking()
+        {
+            return _service.GetAllAccountsBanking();
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetAccountBankingById(int id)
@@ -50,8 +61,8 @@ namespace stone_webapi_breakeven.Controllers
             return Ok(accountBanking);
         }
 
-
-        [HttpGet]
+        [Obsolete]
+        [HttpGet("SkipAndTake")]
         public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
             var result = _service.GetAccountBankingSkipAndTake(skipe, take);
@@ -78,10 +89,10 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult DeleteAccountBanking(int id)
         {
             var accountBanking = _service.GetAccountBankingById(id);
-            if (accountBanking== null) return NotFound();
+            if (accountBanking is null) return NotFound();
 
-            _context.Remove(accountBanking);
-            _context.SaveChanges();
+            _service.DeleteAccountBanking(accountBanking);
+
             return NoContent();
         }
 

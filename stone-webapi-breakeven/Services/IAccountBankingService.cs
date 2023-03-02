@@ -9,5 +9,6 @@ namespace stone_webapi_breakeven.Services
         IEnumerable<AccountBanking> GetAllAccountsBanking();
         AccountBanking GetAccountBankingById(int id);
         IEnumerable<AccountBanking> GetAccountBankingSkipAndTake(int skip, int take);
+        void DeleteAccountBanking(AccountBanking accountBanking);
     }
 }

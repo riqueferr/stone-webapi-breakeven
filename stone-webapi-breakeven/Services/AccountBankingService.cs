@@ -37,5 +37,11 @@ namespace stone_webapi_breakeven.Services
         {
             return _context.AccountsBanking.Skip(skip).Take(take);
         }
+
+        public void DeleteAccountBanking(AccountBanking accountBanking)
+        {
+            _context.Remove(accountBanking);
+            _context.SaveChanges();
+        }
     }
 }
