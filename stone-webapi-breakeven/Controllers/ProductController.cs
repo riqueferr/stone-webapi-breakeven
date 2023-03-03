@@ -73,7 +73,6 @@ namespace stone_webapi_breakeven.Controllers
                 return NotFound();
             }
 
-            _context.SaveChanges();
             return NoContent();
         }
 

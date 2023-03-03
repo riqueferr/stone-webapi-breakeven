@@ -7,10 +7,10 @@ namespace stone_webapi_breakeven.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ExtractController
+    public class ExtractController : ControllerBase
     {
 
-        private IExtractService _service;
+        private readonly IExtractService _service;
         public ExtractController(IExtractService service)
         {
             _service = service;

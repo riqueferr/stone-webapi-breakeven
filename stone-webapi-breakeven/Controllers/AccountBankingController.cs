@@ -81,7 +81,8 @@ namespace stone_webapi_breakeven.Controllers
             }
 
             _mapper.Map(accountBankingDto, accountBanking);
-            _context.SaveChanges();
+
+            _service.UpdateAcconuntBanking();
             return NoContent();
         }
 
