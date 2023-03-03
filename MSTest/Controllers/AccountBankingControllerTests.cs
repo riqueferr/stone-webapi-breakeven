@@ -15,8 +15,8 @@ namespace stone_webapi_breakeven.Controllers.Tests
     public class AccountBankingControllerTests
     {
 
-        private static AccountBankingController? _controller;
-        private AccountBankingDto xx;
+        private static AccountBankingController _controller;
+        private AccountBankingDto updateAccountBankingDto;
 
         [TestInitialize]
         public void Initialize()
@@ -32,7 +32,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
             _controller = new AccountBankingController(mapper, mockService.Object);
 
 
-            xx = new AccountBankingDto { Document = "123123123" };
+            updateAccountBankingDto = new AccountBankingDto { Document = "123123123" };
         }
 
         [TestMethod()]
@@ -87,14 +87,15 @@ namespace stone_webapi_breakeven.Controllers.Tests
         }
 
 
-/*        [TestMethod()]
+        [TestMethod()]
         public void UpdateAccountBanking()
         {
-            var action = _controller.UpdateAccountBanking(1, xx);
+            var action = _controller.UpdateAccountBanking(1, updateAccountBankingDto);
+            var xxx = action as NoContentResult;
 
-            Assert.AreEqual(action, typeof(ActionResult));
-            Assert.AreEqual("123123123", xx.Document);
-        }*/
+            Assert.IsNotNull(action);
+            Assert.AreEqual(204, xxx.StatusCode);
+        }
 
 
         //Mock
