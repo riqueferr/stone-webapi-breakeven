@@ -22,6 +22,7 @@ namespace stone_webapi_breakeven.Services
             {
                 product.Price = productDto.Price;
             }
+            _context.SaveChanges();
         }
 
         public int CreateProduct(Product product)

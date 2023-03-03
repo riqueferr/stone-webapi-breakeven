@@ -43,5 +43,10 @@ namespace stone_webapi_breakeven.Services
             _context.Remove(accountBanking);
             _context.SaveChanges();
         }
+
+        public void UpdateAcconuntBanking()
+        {
+            _context.SaveChanges();
+        }
     }
 }

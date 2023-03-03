@@ -78,7 +78,7 @@ namespace stone_webapi_breakeven.Services
             return _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id); ;
         }
 
-        public ICollection<WalletProduct> GetWalletByIdAndProductsDetails(int id)
+        public IEnumerable<WalletProduct> GetWalletByIdAndProductsDetails(int id)
         {
             return _context.WalletProducts.Where(x => x.WalletId == id).ToList(); ;
         }
