@@ -30,7 +30,7 @@ namespace stone_webapi_breakeven.Services.Tests
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-            var accountsBanking = new List<Extract>
+            var extracts = new List<Extract>
             {
                 new Extract {ExtractId = 1, ProductId = 10, WalletId = 100, Quantify = 17, TotalPrice = 320, DateTime = DateTime.Parse("2023-02-01"), TransactionStatus = TransactionStatus.Buy.ToString()},
                 new Extract {ExtractId = 2, ProductId = null, WalletId = 200, Quantify = null, TotalPrice = 1250, DateTime = DateTime.Parse("2023-01-07"), TransactionStatus = TransactionStatus.Deposit.ToString()},
@@ -38,7 +38,7 @@ namespace stone_webapi_breakeven.Services.Tests
                 new Extract {ExtractId = 4, ProductId = 10, WalletId = 100, Quantify = 11, TotalPrice = 120, DateTime = DateTime.Now, TransactionStatus = TransactionStatus.Sell.ToString() }
             };
 
-            _context.AddRange(accountsBanking);
+            _context.AddRange(extracts);
             _context.SaveChanges();
 
             _service = new ExtractService(_context);
