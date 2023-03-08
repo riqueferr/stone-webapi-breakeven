@@ -29,7 +29,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
 
             IMapper mapper = new MapperConfiguration(c => c.AddProfile(new AccountBankingProfile())).CreateMapper();
 
-            _controller = new AccountBankingController(mapper, mockService.Object);
+            _controller = new AccountBankingController(null, mapper, mockService.Object);
 
 
             updateAccountBankingDto = new AccountBankingDto { Document = "123123123" };

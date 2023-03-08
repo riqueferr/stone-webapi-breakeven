@@ -17,9 +17,9 @@ namespace stone_webapi_breakeven.Controllers
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<Extract> GetExtractByWalletId(int walletId)
+        public IEnumerable<Extract> GetExtractByWalletId(int id)
         {
-            return _service.GetExtractByWalletId(walletId);
+            return _service.GetExtractByWalletId(id);
         }
     }
 }

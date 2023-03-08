@@ -26,12 +26,6 @@ namespace stone_webapi_breakeven.Controllers
             _mapper = mapper;
         }
 
-        public AccountBankingController(IMapper mapper, IAccountBankingService service)
-        {
-            _service = service;
-            _mapper = mapper;
-        }
-
         [HttpPost]
         public IActionResult CreateAccountBanking([FromBody] AccountBankingDto accountBankingDto)
         {
@@ -61,15 +55,6 @@ namespace stone_webapi_breakeven.Controllers
             return Ok(accountBanking);
         }
 
-        [Obsolete]
-        [HttpGet("SkipAndTake")]
-        public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
-        {
-            var result = _service.GetAccountBankingSkipAndTake(skipe, take);
-
-            return result;
-        }
-
         [HttpPut("{id}")]
         public IActionResult UpdateAccountBanking(int id, [FromBody] AccountBankingDto accountBankingDto)
         {
@@ -80,9 +65,9 @@ namespace stone_webapi_breakeven.Controllers
                 return NotFound();
             }
 
-            _mapper.Map(accountBankingDto, accountBanking);
+            accountBanking = converterAccountBanking(accountBanking, accountBankingDto);
 
-            _service.UpdateAcconuntBanking();
+            _service.UpdateAcconuntBanking(accountBanking);
             return NoContent();
         }
 
@@ -92,7 +77,7 @@ namespace stone_webapi_breakeven.Controllers
             var accountBanking = _service.GetAccountBankingById(id);
             if (accountBanking is null) return NotFound();
 
-            _service.DeleteAccountBanking(accountBanking);
+            _service.DeleteAccountBanking(id);
 
             return NoContent();
         }
@@ -105,5 +90,14 @@ namespace stone_webapi_breakeven.Controllers
             return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active.ToString());
         }
 
+        private AccountBanking converterAccountBanking(AccountBanking accountBanking, AccountBankingDto accountBankingDto)
+        {
+            if (accountBanking.Document != accountBankingDto.Document)
+                accountBanking.Document = accountBankingDto.Document;
+
+            return accountBanking;
+        }
     }
+
+
 }

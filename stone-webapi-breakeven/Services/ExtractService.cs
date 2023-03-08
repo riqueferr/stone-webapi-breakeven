@@ -15,15 +15,14 @@ namespace stone_webapi_breakeven.Services
             _context = context;
         }
 
-        public IEnumerable<Extract> GetAll()
+        public IEnumerable<Extract> GetAllExtract()
         {
             return _context.Extracts.ToList();
         }
 
         public IEnumerable<Extract> GetExtractByWalletId(int walletId)
         {
-            var result = _context.Extracts.OrderByDescending(x => x.WalletId).ToList();
-            return result;
+            return _context.Extracts.Where(x => x.WalletId == walletId);
         }
 
         public void RegisterTransaction(int walletId, int? productId, Enums.TransactionStatus status, int? quantify, double? totalPrice)
@@ -39,6 +38,7 @@ namespace stone_webapi_breakeven.Services
 
 
             _context.Extracts.Add(extract);
+            _context.SaveChanges();
         }
 
     }
