@@ -35,7 +35,6 @@ namespace stone_webapi_breakeven.Services
             } 
 
             throw new BreakevenException("O produto não foi criado");
-
         }
 
         public Product GetProductById(int id)

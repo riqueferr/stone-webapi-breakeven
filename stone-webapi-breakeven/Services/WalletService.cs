@@ -190,7 +190,6 @@ namespace stone_webapi_breakeven.Services
 
         private void CalculateDepositOrWithDrawWallet(Wallet wallet, WalletDto walletDto, TransactionStatus status)
         {
-
             if (walletDto.Balance <= 0 )
             {
                 throw new BreakevenException("Não é possível depositar e/ou sacar valores menores ou iguais a 0 (zero).");
@@ -250,7 +249,5 @@ namespace stone_webapi_breakeven.Services
 
             throw new BreakevenException("Não é possível converter a Action informada para TransationEnum");
         }
-
-
     }
 }
