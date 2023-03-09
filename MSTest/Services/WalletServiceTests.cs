@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
+using stone_webapi_breakeven.Exceptions;
 using stone_webapi_breakeven.Models;
 using stone_webapi_breakeven.Services;
 using System;
@@ -132,6 +133,21 @@ namespace stone_webapi_breakeven.Services.Tests
             Assert.AreEqual(1, action.Products.Count());
             Assert.AreEqual("STNE", action.Products.First().ProductTitle);
             Assert.AreEqual(1.0550000000000002, action.Products.First().Percentage);
+
         }
+        [TestMethod()]
+        public void DepositOrWithdrawWalletBalanceErrorTest()
+        {
+        Assert.ThrowsException<BreakevenException>(() => _service.DepositOrWithdrawWallet(2, new WalletDto { Action = "Deposit", Balance = -40 }));
+        }
+
+        [TestMethod()]
+        public void DepositOrWithdrawWalletActionErrorTest()
+        {
+            var exception = Assert.ThrowsException<BreakevenException>(() => _service.DepositOrWithdrawWallet(2, new WalletDto { Action = "Buy", Balance = 10 }));
+
+            Assert.AreEqual("Não é possível converter a Action informada para TransationEnum", exception);
+        }
+
     }
 }
