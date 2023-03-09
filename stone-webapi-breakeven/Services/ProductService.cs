@@ -42,6 +42,11 @@ namespace stone_webapi_breakeven.Services
             return _context.Products.FirstOrDefault(product => product.Id == id);
         }
 
+        public Product GetProductByTitle(string? title)
+        {
+            return _context.Products.FirstOrDefault(product => product.Title == title);
+        }
+
         public IEnumerable<Product> GetProductSkipAndTake(int skip, int take)
         {
             return _context.Products.Skip(skip).Take(take);

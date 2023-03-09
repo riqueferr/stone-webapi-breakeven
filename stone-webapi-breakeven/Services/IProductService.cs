@@ -11,6 +11,6 @@ namespace stone_webapi_breakeven.Services
         IEnumerable<Product> GetProductSkipAndTake(int skip, int take);
         IEnumerable<Product> PriceOrderByDesc();
         void ConverterProduct(Product product, ProductDto productDto);
-
+        Product GetProductByTitle(string? title);
     }
 }
