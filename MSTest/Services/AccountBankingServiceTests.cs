@@ -42,7 +42,7 @@ namespace stone_webapi_breakeven.Services.Tests
             _context.AddRange(accountsBanking);
             _context.SaveChanges();
 
-            _walletService = new WalletService(_context, null);
+            _walletService = new WalletService(_context, null, null);
             _service = new AccountBankingService(_context, _walletService);
         }
 
