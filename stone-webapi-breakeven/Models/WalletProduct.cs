@@ -6,7 +6,7 @@ namespace stone_webapi_breakeven.Models
     public class WalletProduct
     {
         [Key]
-        public int AccountBankingProductId { get; set; }
+        public int WalletProductId { get; set; }
 
         public int WalletId { get; set; }
         public string ProductTitle { get; set; }

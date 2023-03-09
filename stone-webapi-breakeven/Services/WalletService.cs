@@ -13,11 +13,13 @@ namespace stone_webapi_breakeven.Services
 
         private readonly ReadContext _context;
         private IExtractService _extractService;
+        private IProductService _productService;
 
-        public WalletService(ReadContext context, IExtractService extractService)
+        public WalletService(ReadContext context, IExtractService extractService, IProductService productService)
         {
             _context = context;
             _extractService = extractService;
+            _productService = productService;
         }
 
         public Wallet CreateWallet()
@@ -86,7 +88,7 @@ namespace stone_webapi_breakeven.Services
         public void OrderBuyOrSellProduct(int id, ProductDto productDto)
         {
             TransactionStatus status = ConverterStringFromTransactionEnum(productDto.Action);
-            var product = _context.Products.FirstOrDefault(product => product.Title == productDto.Title);
+            var product = _productService.GetProductByTitle(productDto.Title);
             var wallet = _context.Wallets.FirstOrDefault(wallet => wallet.WalletId == id);
 
             var calcTotalPrice = CalculateTotalPriceBuyOrSell(product.Price, productDto.Quantify);
@@ -181,7 +183,7 @@ namespace stone_webapi_breakeven.Services
         {
             var text = char.ToUpper(status[0]).ToString();
 
-            for (var i = 1; i <= status.Length; i++) {
+            for (var i = 1; i < status.Length; i++) {
                 text += char.ToLower(status[i]).ToString();
             }
 

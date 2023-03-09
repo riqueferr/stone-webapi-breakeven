@@ -108,7 +108,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
                 new WalletProduct
                 {
                     WalletId = 1,
-                    AccountBankingProductId = 1,
+                    WalletProductId = 1,
                     Percentage = 0,
                     AverageTicket = 70.0,
                     Quantify = 1,
