@@ -18,6 +18,8 @@ namespace stone_webapi_breakeven.Controllers.Tests
         private static AccountBankingController _controller;
         private AccountBankingDto updateAccountBankingDto;
 
+        const string GenericDocument = "123456790";
+
         [TestInitialize]
         public void Initialize()
         {
@@ -31,8 +33,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
 
             _controller = new AccountBankingController(null, mapper, mockService.Object);
 
-
-            updateAccountBankingDto = new AccountBankingDto { Document = "123123123" };
+            updateAccountBankingDto = new AccountBankingDto { Document = "1234567904" };
         }
 
         [TestMethod()]
@@ -59,7 +60,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
             Assert.IsInstanceOfType(action, typeof(ActionResult));
             AccountBanking account = okObjectResult.Value as AccountBanking;
             Assert.AreEqual(200, okObjectResult.StatusCode);
-            Assert.AreEqual("11111111111", account.Document);
+            Assert.AreEqual(GenericDocument+"1", account.Document);
             Assert.AreEqual("Active", account.Status);
             Assert.AreEqual(1, account.WalletId);
         }
@@ -106,7 +107,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
                 new AccountBanking()
                 {
                     AccountBankingId = 1,
-                    Document = "11111111111",
+                    Document = "1234567901",
                     Status = "Active",
                     OpentedIn = DateTime.Now,
                     WalletId = 1
@@ -115,7 +116,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
                 new AccountBanking()
                 {
                     AccountBankingId = 2,
-                    Document = "22222222222",
+                    Document = "1234567902",
                     Status = "Active",
                     OpentedIn = DateTime.Now,
                     WalletId = 2
@@ -124,7 +125,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
                 new AccountBanking()
                 {
                     AccountBankingId = 3,
-                    Document = "33333333333",
+                    Document = "1234567903",
                     Status = "Active",
                     OpentedIn = DateTime.Now,
                     WalletId = 3
@@ -137,7 +138,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
             return new AccountBanking
                 {
                     AccountBankingId = 1,
-                    Document = "11111111111",
+                    Document = "1234567901",
                     Status = "Active",
                     OpentedIn = DateTime.Now,
                     WalletId = 1

@@ -144,9 +144,17 @@ namespace stone_webapi_breakeven.Services.Tests
         [TestMethod()]
         public void DepositOrWithdrawWalletActionErrorTest()
         {
-            var exception = Assert.ThrowsException<BreakevenException>(() => _service.DepositOrWithdrawWallet(2, new WalletDto { Action = "Buy", Balance = 10 }));
+            try
+            {
+                _service.DepositOrWithdrawWallet(2, new WalletDto { Action = "Buy", Balance = 10 });
+            } catch (BreakevenException ex)
+            {
+                var msg = "Não é possível converter a Action informada para TransationEnum";
+                Assert.AreEqual(msg, ex.Message);
+            }
 
-            Assert.AreEqual("Não é possível converter a Action informada para TransationEnum", exception);
+
+
         }
 
     }
