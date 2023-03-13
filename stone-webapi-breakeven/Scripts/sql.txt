@@ -7,13 +7,13 @@ CREATE DATABASE `breakeven` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8m
 CREATE TABLE `AccountsBanking` (
   `AccountBankingId` int NOT NULL AUTO_INCREMENT,
   `Document` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Status` int NOT NULL DEFAULT '0',
+  `Status` text NOT NULL,
   `OpentedIn` datetime(6) NOT NULL DEFAULT '0001-01-01 00:00:00.000000',
   `WalletId` int DEFAULT NULL,
   PRIMARY KEY (`AccountBankingId`),
   KEY `FK_Wallets_AccountsBanking_AccountBankingId_idx` (`WalletId`),
   CONSTRAINT `FK_Wallets_AccountsBanking_AccountBankingId` FOREIGN KEY (`WalletId`) REFERENCES `Wallets` (`WalletId`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- breakeven.Products definition
