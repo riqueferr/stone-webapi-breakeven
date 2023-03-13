@@ -1,6 +1,6 @@
 ﻿namespace stone_webapi_breakeven.DTOs
 {
-    public class AccountBankingProductDto
+    public class WalletProductDto
     {
         public int ProductId { get; set; }
         public int Quantify { get; set; }

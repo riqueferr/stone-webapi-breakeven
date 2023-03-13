@@ -9,9 +9,10 @@ namespace stone_webapi_breakeven.Services
     {
         Wallet CreateWallet();
         int CreateWalletForAccountBanking(AccountBanking accountBanking);
-        ICollection<AccountBankingProduct> GetWalletByIdAndProductsDetails(int id);
+        IEnumerable<WalletProduct> GetWalletByIdAndProductsDetails(int id);
         Wallet GetWalletById(int id);
-        bool DepositOrWithdrawWallet(int id, WalletDto walletDto);
-        bool OrderBuyOrSellProduct(int id, ProductDto productDto);
+        void DepositOrWithdrawWallet(int id, WalletDto walletDto);
+        void OrderBuyOrSellProduct(int id, ProductDto productDto);
+        Wallet CalculateProductToWallet(IEnumerable<WalletProduct> products, Wallet wallet);
     }
 }

@@ -12,6 +12,6 @@ namespace stone_webapi_breakeven.Models
         public double? InvestedAmount { get; set; }
         public double? FreeAmount { get; set; }
         public double? TotalAmount { get; set; }
-        public ICollection<AccountBankingProduct>? Products { get; set; }
+        public ICollection<WalletProduct>? Products { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
+using stone_webapi_breakeven.Services;
 
 namespace stone_webapi_breakeven.Controllers
 {
@@ -14,19 +15,20 @@ namespace stone_webapi_breakeven.Controllers
 
         private ReadContext _context;
         private IMapper _mapper;
+        private IProductService _service;
 
-        public ProductController(ReadContext context, IMapper mapper)
+        public ProductController(ReadContext context, IMapper mapper, IProductService service)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
         }
 
         [HttpPost]
         public IActionResult CreateProduct([FromBody] Product product)
         {
 
-            _context.Products.Add(product);
-            _context.SaveChanges();
+           _service.CreateProduct(product);
 
            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
@@ -36,9 +38,11 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetProductById(int id)
         {
 
-            var result = _context.Products.FirstOrDefault(product => product.Id == id);
-            if (result == null) return NotFound();
-            
+            var result = _service.GetProductById(id);
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -46,26 +50,29 @@ namespace stone_webapi_breakeven.Controllers
         [HttpGet]
         public IEnumerable<Product> GetProductSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
-            return _context.Products.Skip(skipe).Take(take);
+            return _service.GetProductSkipAndTake(skipe, take);
         }
 
-        [HttpGet("/teste")]
-        public IEnumerable<Product> Teste([FromQuery] int skipe = 0, [FromQuery] int take = 700)
+        [Obsolete("Chamada obsoluta! Realizado apenas para estudo e compreensão de funcionalidades.")]
+        [HttpGet("/PriceOrderByDesc")]
+        public IEnumerable<Product> PriceOrderByDesc()
         {
-            return _context.Products.Where(c => c.Price > 1000);
+            return _service.PriceOrderByDesc();
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
 
-            var product = _context.Products.FirstOrDefault(
-             product => product.Id == id);
+            var product = _service.GetProductById(id);
 
-            product.Price = productDto.Price;
+            _service.ConverterProduct(product, productDto);
 
-            if (product == null) return NotFound();
-            _context.SaveChanges();
+            if (product is null)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
 
