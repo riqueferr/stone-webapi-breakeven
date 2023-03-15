@@ -12,10 +12,11 @@
 > Ferramentas:
 > - Postman;
 > - .NET 6
-> - Banco de dados: Mysql
+> - Docker
 
 > Inicialização:
 > - CLone o repositório git;
 > - Congifure o banco de dados Mysql no server "localhost", a porta padrão utilizada é "3306". Além do database, deve se chamar "breakeven";
-> - Será necessário login e senha para acesso do banco de dados, os mesmos encontra-se no arquivo: "appsettings.json";
+> - Modifique o nome do arquivo appsettings_sample.json para appsettings.json;
+> - Coloque o login e senha do banco utilizada em seu localhost;
 > - Os demais pacotes utilizados já estão inclusos no projeto;
