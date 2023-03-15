@@ -1,15 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using stone_webapi_breakeven.Data;
-using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
-using stone_webapi_breakeven.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace stone_webapi_breakeven.Services.Tests
 {

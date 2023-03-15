@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using stone_webapi_breakeven.Data;
+﻿using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Enums;
 using stone_webapi_breakeven.Exceptions;
 using stone_webapi_breakeven.Models;
-using System.Runtime.Serialization;
 
 namespace stone_webapi_breakeven.Services
 {
@@ -25,7 +23,6 @@ namespace stone_webapi_breakeven.Services
         public Wallet CreateWallet()
         {
             Wallet wallet = new Wallet();
-            wallet.Balance = 0;
             wallet.InvestedAmount = 0;
             wallet.TotalAmount = 0;
             wallet.FreeAmount = 0;
@@ -39,7 +36,6 @@ namespace stone_webapi_breakeven.Services
         {
 
             Wallet wallet = new Wallet();
-            wallet.Balance = 0;
             wallet.InvestedAmount = 0;
             wallet.TotalAmount = 0;
             wallet.FreeAmount = 0;
@@ -120,12 +116,15 @@ namespace stone_webapi_breakeven.Services
                     wallet.FreeAmount += (priceSell) + ((priceSell) * calculatePercentage);
                     wallet.TotalAmount = wallet.InvestedAmount + wallet.FreeAmount;
 
-                    _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, ((priceSell) * calculatePercentage));
+                    _extractService.RegisterTransaction(wallet.WalletId, product.Id, TransactionStatus.Sell, productDto.Quantify, ( priceSell + ((priceSell) * calculatePercentage)));
 
                     RemoveQuantifyProduct(productSell, productDto);
 
                     _context.SaveChanges();
                     break;
+                
+                default:
+                    throw new BreakevenException("Não é possível converter a Action informada para TransationEnum");
             }
 
         }
@@ -144,15 +143,12 @@ namespace stone_webapi_breakeven.Services
 
                     walletPersist.TotalAmount += diferent;
 
-                    walletPersist.Products.Add(product);
+                    walletPersist.WalletProducts.Add(product);
                 }
                 walletPersist.InvestedAmount = walletPersist.TotalAmount - walletPersist.FreeAmount;
                 return walletPersist;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         private double CalculateTotalPriceBuyOrSell(double Price, int Quantify)

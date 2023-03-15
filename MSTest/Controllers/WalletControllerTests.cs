@@ -1,16 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using stone_webapi_breakeven.Controllers;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
 using stone_webapi_breakeven.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace stone_webapi_breakeven.Controllers.Tests
 {
@@ -92,11 +85,10 @@ namespace stone_webapi_breakeven.Controllers.Tests
             return new Wallet
             {
                 WalletId = 1,
-                Balance= 0,
                 FreeAmount= 0,
                 InvestedAmount= 0,
                 TotalAmount = 0,
-                Products = null                
+                WalletProducts = null                
             };
         }
 

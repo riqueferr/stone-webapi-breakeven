@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
 using stone_webapi_breakeven.Profiles;
 using stone_webapi_breakeven.Services;
-using System.Net;
 
 namespace stone_webapi_breakeven.Controllers.Tests
 {

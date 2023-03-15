@@ -4,12 +4,6 @@ using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Exceptions;
 using stone_webapi_breakeven.Models;
-using stone_webapi_breakeven.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace stone_webapi_breakeven.Services.Tests
 {
@@ -41,8 +35,8 @@ namespace stone_webapi_breakeven.Services.Tests
 
             var wallets = new List<Wallet>
             {
-                new Wallet {WalletId = 1, FreeAmount = 500, InvestedAmount = 0, TotalAmount = 500, Products = null},
-                new Wallet {WalletId = 2, FreeAmount = 500, InvestedAmount = 100, TotalAmount = 600, Products = walletProducts},
+                new Wallet {WalletId = 1, FreeAmount = 500, InvestedAmount = 0, TotalAmount = 500, WalletProducts = null},
+                new Wallet {WalletId = 2, FreeAmount = 500, InvestedAmount = 100, TotalAmount = 600, WalletProducts = walletProducts},
             };
 
             _context.AddRange(wallets);
@@ -89,7 +83,7 @@ namespace stone_webapi_breakeven.Services.Tests
 
             Assert.IsNotNull(action);
             Assert.AreEqual(1, action.WalletId);
-            Assert.IsNull(action.Products);
+            Assert.IsNull(action.WalletProducts);
         }
 
         [TestMethod()]
@@ -109,8 +103,8 @@ namespace stone_webapi_breakeven.Services.Tests
             var action = _service.GetWalletById(1);
 
             Assert.IsNotNull(action);
-            Assert.AreEqual(1, action.Products.Count());
-            Assert.AreEqual("STNE", action.Products.First().ProductTitle);
+            Assert.AreEqual(1, action.WalletProducts.Count());
+            Assert.AreEqual("STNE", action.WalletProducts.First().ProductTitle);
         }
 
         [TestMethod()]
@@ -130,9 +124,9 @@ namespace stone_webapi_breakeven.Services.Tests
             Assert.AreEqual(20.55000000000001, action.InvestedAmount);
             Assert.AreEqual(490, action.FreeAmount);
             Assert.AreEqual(510.55, action.TotalAmount);
-            Assert.AreEqual(1, action.Products.Count());
-            Assert.AreEqual("STNE", action.Products.First().ProductTitle);
-            Assert.AreEqual(1.0550000000000002, action.Products.First().Percentage);
+            Assert.AreEqual(1, action.WalletProducts.Count());
+            Assert.AreEqual("STNE", action.WalletProducts.First().ProductTitle);
+            Assert.AreEqual(1.0550000000000002, action.WalletProducts.First().Percentage);
 
         }
         [TestMethod()]

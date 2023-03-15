@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
@@ -12,7 +11,6 @@ namespace stone_webapi_breakeven.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
-
         private ReadContext _context;
         private IMapper _mapper;
         private IProductService _service;
@@ -27,8 +25,7 @@ namespace stone_webapi_breakeven.Controllers
         [HttpPost]
         public IActionResult CreateProduct([FromBody] Product product)
         {
-
-           _service.CreateProduct(product);
+            _service.CreateProduct(product);
 
            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
@@ -63,7 +60,6 @@ namespace stone_webapi_breakeven.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
-
             var product = _service.GetProductById(id);
 
             _service.ConverterProduct(product, productDto);

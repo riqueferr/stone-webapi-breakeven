@@ -51,14 +51,14 @@ CREATE TABLE `Wallets` (
 -- breakeven.WalletProducts definition
 
 CREATE TABLE `WalletProducts` (
-  `AccountBankingProductId` int NOT NULL AUTO_INCREMENT,
+  `WalletProductId` int NOT NULL AUTO_INCREMENT,
   `WalletId` int DEFAULT NULL,
   `ProductTitle` text,
   `Quantify` int DEFAULT NULL,
   `TotalPrice` double DEFAULT NULL,
   `Percentage` double DEFAULT NULL,
   `AverageTicket` double DEFAULT NULL,
-  PRIMARY KEY (`AccountBankingProductId`)
+  PRIMARY KEY (`WalletProductId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
