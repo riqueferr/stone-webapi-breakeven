@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
-using stone_webapi_breakeven.Profiles;
 using stone_webapi_breakeven.Services;
 
 namespace stone_webapi_breakeven.Controllers
@@ -36,54 +33,68 @@ namespace stone_webapi_breakeven.Controllers
 
         }
 
+        [HttpGet]
+        public IEnumerable<AccountBanking> GetAllAccountBanking()
+        {
+            return _service.GetAllAccountsBanking();
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetAccountBankingById(int id)
         {
 
-            var result = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
-            if (result == null) return NotFound();
-            
-            return Ok(result);
-        }
+            var accountBanking = _service.GetAccountBankingById(id);
+            if (accountBanking is null)
+            {
+                return NotFound();
+            }
 
-
-        [HttpGet]
-        public IEnumerable<AccountBanking> GetAccountBankingSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
-        {
-            return _context.AccountsBanking.Skip(skipe).Take(take);
+            return Ok(accountBanking);
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateAccountBanking(int id, [FromBody] AccountBankingDto accountBankingDto)
         {
-            var accountBanking = _context.AccountsBanking.FirstOrDefault(
-                accountBanking => accountBanking.AccountBankingId == id);
+            var accountBanking = _service.GetAccountBankingById(id);
 
-            if(accountBanking == null) return NotFound();
+            if (accountBanking is null)
+            {
+                return NotFound();
+            }
 
-            _mapper.Map(accountBankingDto, accountBanking);
-            _context.SaveChanges();
+            accountBanking = converterAccountBanking(accountBanking, accountBankingDto);
+
+            _service.UpdateAcconuntBanking(accountBanking);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteAccountBanking(int id)
         {
-            var accountBanking = _context.AccountsBanking.FirstOrDefault(accountBanking => accountBanking.AccountBankingId == id);
-            if (accountBanking== null) return NotFound();
+            var accountBanking = _service.GetAccountBankingById(id);
+            if (accountBanking is null) return NotFound();
 
-            _context.Remove(accountBanking);
-            _context.SaveChanges();
+            _service.DeleteAccountBanking(id);
+
             return NoContent();
         }
 
 
-        [HttpGet("test")]
+        [HttpGet("/status")]
         public IEnumerable<AccountBanking> Test([FromQuery] string status)
         {
-            return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active);
+
+            return _context.AccountsBanking.Where(accountBanking => accountBanking.Status == Enums.AccountBankingStatus.Active.ToString());
         }
 
+        private AccountBanking converterAccountBanking(AccountBanking accountBanking, AccountBankingDto accountBankingDto)
+        {
+            if (accountBanking.Document != accountBankingDto.Document)
+                accountBanking.Document = accountBankingDto.Document;
+
+            return accountBanking;
+        }
     }
+
+
 }

@@ -1,0 +1,77 @@
+CREATE DATABASE `breakeven` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+-----------------------------
+
+-- breakeven.AccountsBanking definition
+
+CREATE TABLE `AccountsBanking` (
+  `AccountBankingId` int NOT NULL AUTO_INCREMENT,
+  `Document` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Status` text NOT NULL,
+  `OpentedIn` datetime(6) NOT NULL DEFAULT '0001-01-01 00:00:00.000000',
+  `WalletId` int DEFAULT NULL,
+  PRIMARY KEY (`AccountBankingId`),
+  KEY `FK_Wallets_AccountsBanking_AccountBankingId_idx` (`WalletId`),
+  CONSTRAINT `FK_Wallets_AccountsBanking_AccountBankingId` FOREIGN KEY (`WalletId`) REFERENCES `Wallets` (`WalletId`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- breakeven.Products definition
+
+CREATE TABLE `Products` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Price` double NOT NULL,
+  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `TotalPrice` double DEFAULT NULL,
+  `Type` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Balance` double NOT NULL DEFAULT '0',
+  `AverageTicket` double DEFAULT NULL,
+  `PercentageEvolution` int DEFAULT NULL,
+  `WalletId` int DEFAULT NULL,
+  `Quantify` int DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_Products_WalletId` (`WalletId`),
+  CONSTRAINT `FK_Products_Wallets_WalletId` FOREIGN KEY (`WalletId`) REFERENCES `Wallets` (`WalletId`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- breakeven.Wallets definition
+
+CREATE TABLE `Wallets` (
+  `WalletId` int NOT NULL AUTO_INCREMENT,
+  `Balance` double DEFAULT '0',
+  `FreeAmount` double DEFAULT NULL,
+  `InvestedAmount` double DEFAULT NULL,
+  `TotalAmount` double DEFAULT NULL,
+  PRIMARY KEY (`WalletId`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- breakeven.WalletProducts definition
+
+CREATE TABLE `WalletProducts` (
+  `WalletProductId` int NOT NULL AUTO_INCREMENT,
+  `WalletId` int DEFAULT NULL,
+  `ProductTitle` text,
+  `Quantify` int DEFAULT NULL,
+  `TotalPrice` double DEFAULT NULL,
+  `Percentage` double DEFAULT NULL,
+  `AverageTicket` double DEFAULT NULL,
+  PRIMARY KEY (`WalletProductId`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- breakeven.Extracts definition
+
+CREATE TABLE `Extracts` (
+  `ExtractId` int NOT NULL AUTO_INCREMENT,
+  `WalletId` int DEFAULT NULL,
+  `ProductId` int DEFAULT NULL,
+  `Quantify` int DEFAULT NULL,
+  `TotalPrice` double DEFAULT NULL,
+  `DateTime` datetime DEFAULT NULL,
+  `TransactionStatus` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  PRIMARY KEY (`ExtractId`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+

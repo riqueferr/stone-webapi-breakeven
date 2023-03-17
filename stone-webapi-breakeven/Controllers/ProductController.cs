@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using stone_webapi_breakeven.Data;
 using stone_webapi_breakeven.DTOs;
 using stone_webapi_breakeven.Models;
+using stone_webapi_breakeven.Services;
 
 namespace stone_webapi_breakeven.Controllers
 {
@@ -11,22 +11,21 @@ namespace stone_webapi_breakeven.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
-
         private ReadContext _context;
         private IMapper _mapper;
+        private IProductService _service;
 
-        public ProductController(ReadContext context, IMapper mapper)
+        public ProductController(ReadContext context, IMapper mapper, IProductService service)
         {
             _context = context;
             _mapper = mapper;
+            _service = service;
         }
 
         [HttpPost]
         public IActionResult CreateProduct([FromBody] Product product)
         {
-
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            _service.CreateProduct(product);
 
            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
@@ -36,9 +35,11 @@ namespace stone_webapi_breakeven.Controllers
         public IActionResult GetProductById(int id)
         {
 
-            var result = _context.Products.FirstOrDefault(product => product.Id == id);
-            if (result == null) return NotFound();
-            
+            var result = _service.GetProductById(id);
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -46,26 +47,21 @@ namespace stone_webapi_breakeven.Controllers
         [HttpGet]
         public IEnumerable<Product> GetProductSkipAndTake([FromQuery] int skipe = 0, [FromQuery] int take = 700)
         {
-            return _context.Products.Skip(skipe).Take(take);
-        }
-
-        [HttpGet("/teste")]
-        public IEnumerable<Product> Teste([FromQuery] int skipe = 0, [FromQuery] int take = 700)
-        {
-            return _context.Products.Where(c => c.Price > 1000);
+            return _service.GetProductSkipAndTake(skipe, take);
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
+            var product = _service.GetProductById(id);
 
-            var product = _context.Products.FirstOrDefault(
-             product => product.Id == id);
+            _service.ConverterProduct(product, productDto);
 
-            product.Price = productDto.Price;
+            if (product is null)
+            {
+                return NotFound();
+            }
 
-            if (product == null) return NotFound();
-            _context.SaveChanges();
             return NoContent();
         }
 

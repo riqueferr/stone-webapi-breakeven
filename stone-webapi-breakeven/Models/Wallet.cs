@@ -8,10 +8,9 @@ namespace stone_webapi_breakeven.Models
         [Key]
         [Required]
         public int WalletId { get; set; }
-        public double Balance { get; set; }
         public double? InvestedAmount { get; set; }
         public double? FreeAmount { get; set; }
         public double? TotalAmount { get; set; }
-        public ICollection<AccountBankingProduct>? Products { get; set; }
+        public ICollection<WalletProduct>? WalletProducts { get; set; }
     }
 }
