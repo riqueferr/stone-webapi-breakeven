@@ -50,13 +50,6 @@ namespace stone_webapi_breakeven.Controllers
             return _service.GetProductSkipAndTake(skipe, take);
         }
 
-        [Obsolete("Chamada obsoluta! Realizado apenas para estudo e compreensão de funcionalidades.")]
-        [HttpGet("/PriceOrderByDesc")]
-        public IEnumerable<Product> PriceOrderByDesc()
-        {
-            return _service.PriceOrderByDesc();
-        }
-
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] ProductDto productDto)
         {

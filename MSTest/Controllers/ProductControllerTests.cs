@@ -17,6 +17,9 @@ namespace stone_webapi_breakeven.Controllers.Tests
         private ProductController _controller;
         private ProductDto updateProduct;
 
+        const string GenericCode = "STNE";
+        private const int GenericQuantify = 1000;
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -60,7 +63,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
             var product = okObjectResult.Value as Product;
 
             Assert.AreEqual(200, okObjectResult.StatusCode);
-            Assert.AreEqual("STNE", product.Title);
+            Assert.AreEqual(GenericCode, product.Title);
             Assert.AreEqual(70, product.Price);
         }
 
@@ -94,7 +97,7 @@ namespace stone_webapi_breakeven.Controllers.Tests
             return new Product
             {
                 Id = 1,
-                Title = "STNE",
+                Title = GenericCode,
                 Description = "",
                 Price = 70.0,
                 Type = "FII",
@@ -109,31 +112,31 @@ namespace stone_webapi_breakeven.Controllers.Tests
                 new Product
                 {
                 Id = 1,
-                Title = "STNE",
+                Title = GenericCode,
                 Description = "Ação da empresa",
                 Price = 70.0,
                 Type = "Action",
-                Quantify = 1000
+                Quantify = GenericQuantify
                 },
 
                 new Product
                 {
                 Id = 2,
-                Title = "XPTO",
+                Title = GenericCode+"0",
                 Description = "Renda Fixa (110%)",
                 Price = 18.81,
                 Type = "CDB",
-                Quantify = 1000
+                Quantify = GenericQuantify
                 },
 
                 new Product
                 {
                 Id = 3,
-                Title = "XPTO11",
+                Title = GenericCode+"11",
                 Description = "Fundo de investimento da XPTO",
                 Price = 21.79,
                 Type = "FII",
-                Quantify = 1000
+                Quantify = GenericQuantify
                 }
             };
         }
